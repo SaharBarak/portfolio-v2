@@ -5,9 +5,15 @@ import { motion } from "framer-motion";
 const projects = [
   {
     title: "Karen CLI",
-    description: "Open-source command-line tools for developers, based on Karen AI. Bringing AI-powered layout regression testing and automatic fixing directly to your terminal workflow.",
+    description: "CLI for running layout regression checks, producing structured reports that can be fed to AI agents for automated refactoring.",
     tags: ["CLI", "TypeScript", "AI", "Developer Tools"],
     github: "https://github.com/saharbarak/karen-cli",
+  },
+  {
+    title: "White Hydrogen Detection (GeoH2-AI)",
+    description: "Early-stage tooling for geospatial feature extraction and ML experiments on hydrogen seep detection.",
+    tags: ["Python", "ML", "Geospatial", "Clean Energy"],
+    github: "https://github.com/SaharBarak/geoh2-ai",
   }
 ];
 
@@ -67,7 +73,7 @@ export default function OpenSourceCode() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Tools and libraries I&apos;ve built and released for the developer community.
+          Code I&apos;ve released to support other builders and to push these ideas into the wild.
         </motion.p>
 
         {/* Projects */}

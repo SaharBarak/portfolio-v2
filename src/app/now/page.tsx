@@ -34,42 +34,73 @@ export default function NowPage() {
             </a>
           </p>
 
-          {/* Current Focus */}
+          {/* Products & Platforms */}
           <section className="mb-12">
             <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
-              Current Focus
+              Products & Platforms
             </h2>
 
             <div className="space-y-6">
-              <div className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl">
+              <a
+                href="https://wessley.ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
+              >
                 <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Building Portfolio v2
+                  Wessley AI
                 </h3>
                 <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  Creating a new portfolio website with Next.js, WebGL animations,
-                  and a modern design system. Focusing on performance and accessibility.
+                  World&apos;s first AI-powered virtual garage allowing you to examine your car in 3D, plan work, repairs,
+                  upgrades, and order replacements with model-specific precision. Building a full pipeline from OEM
+                  schematics → graph → 3D wiring → AI &quot;virtual mechanic.&quot;
                 </p>
-              </div>
+              </a>
 
-              <div className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl">
+              <a
+                href="https://karencli.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
+              >
                 <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Learning Advanced ML Techniques
+                  Karen AI
                 </h3>
                 <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  Deep diving into transformer architectures, fine-tuning LLMs,
-                  and exploring multimodal AI applications.
+                  AI layout regression testing and automatic fixings. Renders your app across viewports,
+                  detects layout and responsiveness issues, and generates concrete CSS/layout fixes.
                 </p>
-              </div>
+              </a>
 
-              <div className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl">
+              <a
+                href="https://github.com/saharbarak/karen-cli"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
+              >
                 <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Open Source Contributions
+                  Karen CLI
                 </h3>
                 <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  Contributing to developer tools and libraries that help
-                  improve the ecosystem.
+                  Open-source command-line tooling for Karen AI. Lets developers run layout checks from the terminal,
+                  generate actionable tasks, and plug visual sanity checks into CI/CD.
                 </p>
-              </div>
+              </a>
+
+              <a
+                href="https://thepeaceboard.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
+              >
+                <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
+                  The Peace Board
+                </h3>
+                <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
+                  A decentralized peace art demonstration. Maps peace pledges worldwide, visualizes percentages by country,
+                  exploring how civilian majorities can exert real leverage over policy.
+                </p>
+              </a>
             </div>
           </section>
 
@@ -125,7 +156,7 @@ export default function NowPage() {
                 <span className="text-2xl">📍</span>
                 <div>
                   <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Based in Israel, working remotely and traveling when possible.
+                    Based in Israel, building with Two Circle Studios and working on ventures.
                   </p>
                 </div>
               </div>
@@ -134,7 +165,7 @@ export default function NowPage() {
                 <span className="text-2xl">🎯</span>
                 <div>
                   <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Focusing on health, continuous learning, and meaningful work.
+                    Building an ecosystem of interoperable tools for better human coordination.
                   </p>
                 </div>
               </div>
@@ -143,7 +174,7 @@ export default function NowPage() {
                 <span className="text-2xl">🌱</span>
                 <div>
                   <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Exploring sustainable living and clean energy solutions.
+                    Exploring AI + physical infrastructure, decentralization + governance, and collaborative systems.
                   </p>
                 </div>
               </div>

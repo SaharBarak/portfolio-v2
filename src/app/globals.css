@@ -328,6 +328,75 @@ html[data-theme="dark"],
 }
 
 /* ============================================
+   HERO BUTTONS - Solid design
+   ============================================ */
+
+/* Light mode - solid buttons */
+.hero-btn-primary {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-btn-primary:hover {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+.hero-btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-strong);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Dark mode - solid white button */
+.dark .hero-btn-primary,
+html[data-theme="dark"] .hero-btn-primary {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.dark .hero-btn-primary:hover,
+html[data-theme="dark"] .hero-btn-primary:hover {
+  background: #ffffff !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 60px rgba(255, 255, 255, 0.2) !important;
+}
+
+.dark .hero-btn-secondary,
+html[data-theme="dark"] .hero-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .hero-btn-secondary:hover,
+html[data-theme="dark"] .hero-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
    BASE STYLES
    ============================================ */
 html {
@@ -335,10 +404,13 @@ html {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   min-width: 300px;
+  width: 100%;
+  height: 100%;
   text-align: left;
   text-rendering: optimizeLegibility;
   text-size-adjust: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
   background: transparent;
 }
 
@@ -350,6 +422,10 @@ body {
   letter-spacing: var(--tracking-normal);
   color: var(--current-text-normal);
   min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   background: transparent;
 }
 
@@ -546,25 +622,100 @@ html[data-theme="dark"] .gradient {
 /* ============================================
    HEADER STYLES
    ============================================ */
+/* Header wrapper - Apple Liquid Glass effect with SVG filter */
+.header-wrapper {
+  background: transparent;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Liquid Glass Effect Layer - applies SVG filter + blur */
+.liquid-glass-effect {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  filter: url(#liquid-glass-filter);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Liquid Glass Tint Layer */
+.liquid-glass-tint {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Liquid Glass Shine Layer - inner highlights */
+.liquid-glass-shine {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Show liquid glass layers when scrolled */
+.header-wrapper:has(.header-scrolled) .liquid-glass-effect,
+.header-wrapper:has(.header-scrolled) .liquid-glass-tint,
+.header-wrapper:has(.header-scrolled) .liquid-glass-shine {
+  opacity: 1;
+}
+
+/* Dark mode tint adjustment */
+.dark .liquid-glass-tint {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .liquid-glass-shine {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+}
+
 .header {
+  position: relative;
+  z-index: 10;
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: var(--gap);
   row-gap: 2rem;
-  z-index: 40;
   color: var(--current-text-bold);
-  transition: all 200ms ease-out;
   width: 100%;
   background: transparent;
-  backdrop-filter: none;
   border: none;
-  border-radius: 16px;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+  border-radius: var(--radius-lg);
+  padding: 1rem var(--space-4);
+  margin-bottom: 0;
   box-shadow: none;
   overflow: visible;
+}
+
+@media screen and (min-width: 1024px) {
+  .header {
+    padding: 1rem var(--space-8);
+  }
+}
+
+.header-scrolled {
+  /* Class used to trigger wrapper blur via :has() */
 }
 
 .me {
@@ -916,6 +1067,11 @@ html[data-theme="dark"] .gradient {
   0% { transform: translate(0, 0px); }
   50% { transform: translate(0, 15px); }
   100% { transform: translate(0, -0px); }
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
 }
 
 /* Chapter delays */
@@ -1351,6 +1507,53 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Smooth scroll anchors with em-based offset */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5em; /* Header offset in em */
+}
+
+/* Scroll margin for anchor targets */
+[id] {
+  scroll-margin-top: 5em;
+}
+
+/* Ensure smooth momentum on iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ============================================
+   CUSTOM CURSORS
+   ============================================ */
+
+/* Dark mode cursor - light/white elegant crosshair */
+html[data-theme="dark"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='3' stroke='%23ffffff' stroke-width='1.5' fill='none' opacity='0.8'/%3E%3Cline x1='12' y1='2' x2='12' y2='7' stroke='%23ffffff' stroke-width='1' opacity='0.5'/%3E%3Cline x1='12' y1='17' x2='12' y2='22' stroke='%23ffffff' stroke-width='1' opacity='0.5'/%3E%3Cline x1='2' y1='12' x2='7' y2='12' stroke='%23ffffff' stroke-width='1' opacity='0.5'/%3E%3Cline x1='17' y1='12' x2='22' y2='12' stroke='%23ffffff' stroke-width='1' opacity='0.5'/%3E%3C/svg%3E") 12 12, crosshair;
+}
+
+/* Light mode cursor - dark subtle dot */
+html[data-theme="light"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='10' cy='10' r='3' fill='%231a1a1a' opacity='0.7'/%3E%3Ccircle cx='10' cy='10' r='5' stroke='%231a1a1a' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E") 10 10, default;
+}
+
+/* Pointer cursor for interactive elements */
+html[data-theme="dark"] a,
+html[data-theme="dark"] button,
+html[data-theme="dark"] [role="button"],
+html[data-theme="dark"] .cursor-pointer {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='5' fill='%23ffffff' opacity='0.9'/%3E%3Ccircle cx='12' cy='12' r='8' stroke='%23ffffff' stroke-width='1.5' fill='none' opacity='0.4'/%3E%3C/svg%3E") 12 12, pointer;
+}
+
+html[data-theme="light"] a,
+html[data-theme="light"] button,
+html[data-theme="light"] [role="button"],
+html[data-theme="light"] .cursor-pointer {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='10' cy='10' r='4' fill='%231a1a1a' opacity='0.9'/%3E%3Ccircle cx='10' cy='10' r='7' stroke='%231a1a1a' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E") 10 10, pointer;
+}
+
 /* ============================================
    TAILWIND BASE OVERRIDES
    ============================================ */
@@ -1361,5 +1564,18 @@ html.lenis, html.lenis body {
   body {
     @apply text-foreground;
     /* Background is transparent to allow WebGL scene to show through hero */
+    user-select: none;
+    -webkit-user-select: none;
   }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

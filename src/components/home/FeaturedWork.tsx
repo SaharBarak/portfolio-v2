@@ -1,198 +1,277 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
-interface FeaturedWorkSectionProps {
+interface Project {
   title: string;
+  subtitle: string;
   description: string;
-  tags: string[];
-  link?: string;
-  github?: string;
-  index: number;
+  link: string;
+  logo: string;
+  brandColors: {
+    bg: string;
+    accent: string;
+    text: string;
+    textMuted: string;
+  };
 }
 
-const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({
-  title,
-  description,
-  tags,
-  link,
-  github,
-  index,
-}) => (
-  <motion.article
-    className={`${index % 2 === 1 ? 'section-dark' : ''}`}
-    style={{ padding: 'var(--space-32) 0' }}
-    initial={{ opacity: 0, y: 60 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.15 }}
-    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-  >
-    <div
-      className="max-w-5xl mx-auto"
-      style={{ padding: '0 var(--space-8)' }}
-    >
-      {/* Project Number */}
-      <span
-        className="block font-mono tracking-widest"
-        style={{
-          fontSize: 'var(--text-sm)',
-          color: 'var(--current-text-light)',
-          opacity: 0.5,
-          marginBottom: 'var(--space-8)',
-        }}
-      >
-        0{index + 1}
-      </span>
-
-      {/* Project Title */}
-      <h3
-        className="font-heading font-bold tracking-tight"
-        style={{
-          fontSize: 'var(--text-4xl)',
-          color: 'var(--current-text-bold)',
-          marginBottom: 'var(--space-8)',
-          lineHeight: 'var(--leading-tight)',
-        }}
-      >
-        {title}
-      </h3>
-
-      {/* Description */}
-      <p
-        className="max-w-2xl"
-        style={{
-          fontSize: 'var(--text-lg)',
-          lineHeight: 'var(--leading-loose)',
-          color: 'var(--current-text-normal)',
-          marginBottom: 'var(--space-10)',
-        }}
-      >
-        {description}
-      </p>
-
-      {/* Tags */}
-      <div
-        className="flex flex-wrap"
-        style={{
-          gap: 'var(--space-6)',
-          marginBottom: 'var(--space-10)',
-        }}
-      >
-        {tags.map((tag, tagIndex) => (
-          <span
-            key={tagIndex}
-            className="font-medium"
-            style={{
-              fontSize: 'var(--text-sm)',
-              color: 'var(--current-text-light)',
-              letterSpacing: 'var(--tracking-wide)',
-            }}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Links */}
-      <div className="flex flex-wrap items-center" style={{ gap: 'var(--space-8)' }}>
-        {link && link !== '#' && (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center font-semibold hover:opacity-70 transition-opacity"
-            style={{
-              gap: 'var(--space-3)',
-              color: 'var(--current-text-bold)',
-              fontSize: 'var(--text-md)',
-            }}
-          >
-            View Project
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
-        )}
-        {github && (
-          <a
-            href={github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center font-medium hover:opacity-70 transition-opacity"
-            style={{
-              gap: 'var(--space-3)',
-              color: 'var(--current-text-normal)',
-              fontSize: 'var(--text-md)',
-            }}
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub
-          </a>
-        )}
-      </div>
-    </div>
-  </motion.article>
-);
-
-const projects = [
+const projects: Project[] = [
   {
-    title: "Karen AI",
-    description: "AI-powered layout regression testing and automatic fixing. Karen detects visual regressions in your UI and suggests fixes automatically, streamlining your QA workflow.",
-    tags: ["AI", "Testing", "Automation", "DevTools"],
-    link: "#",
-    github: "https://github.com/saharbarak/karen-ai",
-  },
-  {
-    title: "White Hydrogen Detection",
-    description: "Pioneering satellite data analysis for clean energy discovery. Using machine learning to analyze geological formations and detect potential white hydrogen seeps from space.",
-    tags: ["Satellite Data", "Clean Energy", "ML", "Research"],
-    link: "#",
-    github: "https://github.com/saharbarak/white-hydrogen",
+    title: "Wessley AI",
+    subtitle: "Virtual Garage",
+    description: "Understand your car in 3D. Plan repairs, upgrades, and order parts with model-specific precision.",
+    link: "https://wessley.ai/",
+    logo: "/ventures/wessley-logo.svg",
+    brandColors: {
+      bg: "#00141E",
+      accent: "#22E974",
+      text: "#ffffff",
+      textMuted: "rgba(255,255,255,0.5)",
+    },
   },
   {
     title: "Karen CLI",
-    description: "Open-source command-line tools for developers, based on Karen AI. Bringing AI-powered development assistance directly to your terminal.",
-    tags: ["CLI", "Open Source", "Developer Tools"],
-    link: "#",
-    github: "https://github.com/saharbarak/karen-cli",
+    subtitle: "Layout Testing",
+    description: "AI-powered layout regression testing. Detects visual issues and generates CSS fixes automatically.",
+    link: "https://karencli.dev/",
+    logo: "/ventures/karen-hair.svg",
+    brandColors: {
+      bg: "#0C0A09",
+      accent: "#CE5D17",
+      text: "#ffffff",
+      textMuted: "rgba(255,255,255,0.5)",
+    },
   },
   {
-    title: "Wessley AI",
-    description: "World's first AI-powered virtual garage. Examine your car in 3D, plan work, repairs, upgrades, and order replacements - all with model-specific precision.",
-    tags: ["AI", "3D", "Automotive", "Innovation"],
-    link: "#",
-    github: "https://github.com/saharbarak/wessley-ai",
-  }
+    title: "The Peace Board",
+    subtitle: "Decentralized Pledges",
+    description: "A live map showing where people stand on peace. Turning pledges into visible signal by country.",
+    link: "https://thepeaceboard.com/",
+    logo: "/ventures/peaceboard-logo.svg",
+    brandColors: {
+      bg: "#0a0a0a",
+      accent: "#FFE262",
+      text: "#ffffff",
+      textMuted: "rgba(255,255,255,0.5)",
+    },
+  },
+  {
+    title: "Two Circle Studios",
+    subtitle: "Product Studio",
+    description: "Build products end-to-end in a week. Freelance design, high-impact client work, rapid prototyping.",
+    link: "https://twocirclestudios.com/",
+    logo: "/ventures/twocircle-logo.svg",
+    brandColors: {
+      bg: "#FAF7F2",
+      accent: "#FF6B35",
+      text: "#1a1a1a",
+      textMuted: "rgba(26,26,26,0.5)",
+    },
+  },
 ];
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const [isActive, setIsActive] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  return (
+    <motion.div
+      className="group relative flex-shrink-0 overflow-hidden"
+      style={{
+        width: '390px',
+        height: '312px',
+        backgroundColor: project.brandColors.bg,
+        borderRadius: '16px',
+      }}
+      initial={{ opacity: 0, x: 30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      tabIndex={0}
+      onMouseEnter={() => setIsActive(true)}
+      onMouseLeave={() => {
+        setIsActive(false);
+        setIframeLoaded(false);
+      }}
+      onFocus={() => setIsActive(true)}
+      onBlur={() => {
+        setIsActive(false);
+        setIframeLoaded(false);
+      }}
+    >
+      {/* Default Card Content */}
+      <a
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block h-full"
+      >
+        <div className="p-6 flex flex-col h-full">
+          {/* Logo */}
+          <div className="mb-5 h-10 flex items-center">
+            <Image
+              src={project.logo}
+              alt={`${project.title} logo`}
+              width={120}
+              height={40}
+              className="h-9 w-auto object-contain object-left"
+            />
+          </div>
+
+          {/* Subtitle */}
+          <p
+            className="uppercase font-medium"
+            style={{
+              fontSize: '0.625rem',
+              letterSpacing: '0.1em',
+              color: project.brandColors.accent,
+              marginBottom: '8px',
+            }}
+          >
+            {project.subtitle}
+          </p>
+
+          {/* Title */}
+          <h3
+            className="font-semibold"
+            style={{
+              fontSize: '1.375rem',
+              lineHeight: 1.2,
+              color: project.brandColors.text,
+              marginBottom: '12px',
+            }}
+          >
+            {project.title}
+          </h3>
+
+          {/* Description */}
+          <p
+            className="flex-1"
+            style={{
+              fontSize: '0.9375rem',
+              lineHeight: 1.55,
+              color: project.brandColors.textMuted,
+            }}
+          >
+            {project.description}
+          </p>
+
+          {/* Arrow indicator */}
+          <div
+            className="flex items-center gap-2 mt-4"
+            style={{
+              color: project.brandColors.accent,
+              fontSize: '0.8125rem',
+              fontWeight: 500,
+            }}
+          >
+            <span>Visit site</span>
+            <span>→</span>
+          </div>
+        </div>
+      </a>
+
+      {/* Iframe Preview on Hover/Focus */}
+      <AnimatePresence>
+        {isActive && (
+          <motion.div
+            className="absolute inset-0 overflow-hidden"
+            style={{ borderRadius: '16px' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Loading state */}
+            {!iframeLoaded && (
+              <div
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ backgroundColor: project.brandColors.bg }}
+              >
+                <div
+                  className="w-6 h-6 border-2 rounded-full animate-spin"
+                  style={{
+                    borderColor: `${project.brandColors.accent}40`,
+                    borderTopColor: project.brandColors.accent,
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Iframe - scrollable */}
+            <iframe
+              src={project.link}
+              title={`${project.title} preview`}
+              className="w-full h-full border-0"
+              style={{
+                transform: 'scale(0.5)',
+                transformOrigin: 'top left',
+                width: '200%',
+                height: '200%',
+              }}
+              onLoad={() => setIframeLoaded(true)}
+              sandbox="allow-scripts allow-same-origin"
+            />
+
+            {/* Bottom gradient with button - doesn't block iframe interaction */}
+            <div
+              className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-4 pointer-events-none"
+              style={{
+                height: '80px',
+                background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)',
+              }}
+            >
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-full text-white font-medium pointer-events-auto"
+                style={{
+                  fontSize: '0.8125rem',
+                  backgroundColor: project.brandColors.accent,
+                  color: project.brandColors.bg === '#FAF7F2' ? '#1a1a1a' : '#ffffff',
+                }}
+              >
+                Open {project.title} →
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export default function FeaturedWork() {
   return (
-    <section id="featured-work" className="relative" aria-labelledby="featured-work-title">
+    <section
+      id="featured-work"
+      className="relative"
+      style={{ padding: 'var(--space-48) 0' }}
+      aria-labelledby="featured-work-title"
+    >
       {/* Section Header */}
-      <header
-        className="w-full"
-        style={{ padding: 'var(--space-48) var(--space-8) var(--space-32)' }}
-      >
+      <header style={{ marginBottom: 'var(--space-16)', padding: '0 var(--space-8)' }}>
         <div className="max-w-5xl mx-auto">
-          {/* Section Label */}
-          <motion.span
-            className="inline-block text-violet-500 font-semibold uppercase"
+          <motion.p
+            className="font-medium uppercase"
             style={{
-              fontSize: 'var(--text-xs)',
-              letterSpacing: 'var(--tracking-widest)',
-              marginBottom: 'var(--space-8)',
+              fontSize: '0.6875rem',
+              letterSpacing: '0.1em',
+              color: '#8B5CF6',
+              marginBottom: 'var(--space-3)',
             }}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.4 }}
           >
             Featured Work
-          </motion.span>
+          </motion.p>
 
-          {/* Main Heading */}
           <motion.h2
             id="featured-work-title"
             className="font-heading font-black tracking-tight"
@@ -200,12 +279,12 @@ export default function FeaturedWork() {
               fontSize: 'var(--text-6xl)',
               lineHeight: 'var(--leading-none)',
               color: 'var(--current-text-bold)',
-              marginBottom: 'var(--space-8)',
+              marginBottom: 'var(--space-4)',
             }}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.05 }}
           >
             Building the Future
           </motion.h2>
@@ -217,26 +296,32 @@ export default function FeaturedWork() {
               fontSize: 'var(--text-xl)',
               lineHeight: 'var(--leading-relaxed)',
               color: 'var(--current-text-light)',
+              marginTop: 'var(--space-4)',
             }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
-            Innovative solutions at the intersection of AI, clean energy, and developer tools.
+            Products, tools, and ventures I&apos;m actively building.
           </motion.p>
         </div>
       </header>
 
-      {/* Projects List */}
-      <div>
-        {projects.map((project, index) => (
-          <FeaturedWorkSection
-            key={index}
-            {...project}
-            index={index}
-          />
-        ))}
+      {/* Horizontal Scrollable Container - starts more to the left */}
+      <div
+        className="overflow-x-auto scrollbar-hide"
+        style={{
+          paddingLeft: 'var(--space-8)',
+          paddingRight: 'var(--space-8)',
+          paddingBottom: 'var(--space-2)',
+        }}
+      >
+        <div className="flex gap-5" style={{ width: 'max-content' }}>
+          {projects.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );

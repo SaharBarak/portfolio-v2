@@ -65,6 +65,7 @@ export const LINKS = {
   // External Resources & References
   external: {
     aboutIdeasNow: "https://aboutideasnow.com/about",
+    twoCircleStudios: "https://twocirclestudios.com",
   }
 };
 

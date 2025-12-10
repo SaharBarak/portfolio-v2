@@ -23,88 +23,130 @@ export default function IdeasPage() {
           </h1>
 
           <p className="font-body text-[var(--text-lg)] text-[color:var(--text)] mb-12">
-            A collection of thoughts, concepts, and projects I&apos;m exploring or thinking about.
+            Concepts, prototypes, and directions that are in exploration mode.
           </p>
 
           {/* Ideas Grid */}
           <div className="space-y-8">
-            {/* Idea Card */}
+            {/* Taro */}
             <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full">
-                  Active
-                </span>
-                <span className="text-[var(--text-sm)] text-[color:var(--text-muted)]">
-                  Dec 2024
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-[var(--radius-full)]">
+                  Prototype
                 </span>
               </div>
               <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                AI-Powered Code Review Assistant
+                Taro
               </h2>
               <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                Building a tool that uses LLMs to provide contextual code reviews,
-                focusing on architectural patterns and best practices rather than just syntax.
+                A real-time visual graph of chords and harmonies, turning music theory into an evolving network
+                of tensions and resolutions. Play a chord and watch a graph of harmonies and progressions unfold—
+                making learning music theory interactive and informative.
               </p>
               <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  AI/ML
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Music
                 </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  Developer Tools
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Visualization
                 </span>
               </div>
             </article>
 
-            {/* Idea Card */}
+            {/* Brief Me */}
             <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 rounded-full">
-                  Exploring
-                </span>
-                <span className="text-[var(--text-sm)] text-[color:var(--text-muted)]">
-                  Nov 2024
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Decentralized Energy Grid Management
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                Researching how blockchain and IoT can be combined to create
-                more efficient, community-driven renewable energy distribution systems.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  Clean Energy
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  Blockchain
-                </span>
-              </div>
-            </article>
-
-            {/* Idea Card */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-[var(--radius-full)]">
                   Concept
                 </span>
-                <span className="text-[var(--text-sm)] text-[color:var(--text-muted)]">
-                  Oct 2024
+              </div>
+              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
+                Brief Me
+              </h2>
+              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
+                A personal &quot;sense-making&quot; layer that summarizes your data-flooded digital life into timelines,
+                decisions, and action items. An AI that sits on your data—WhatsApp groups, emails, messages—and
+                filters the influx into actionables and calendar events.
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  AI
+                </span>
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Productivity
+                </span>
+              </div>
+            </article>
+
+            {/* SYNC */}
+            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="flex items-start justify-between mb-4">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-[var(--radius-full)]">
+                  Active
                 </span>
               </div>
               <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Collaborative World-Building Platform
+                SYNC
               </h2>
               <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                A platform where writers, artists, and creators can collaboratively
-                build shared fictional universes with consistent lore and visual styles.
+                A Web6-flavored identity layer built from SDS/SEL-DIDs and a user-owned data graph,
+                purposed to fulfill SYNC&apos;s vision of a fully decentralized civilian-powered governance system.
               </p>
               <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  Creative Tools
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Decentralization
                 </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-full">
-                  Collaboration
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Identity
+                </span>
+              </div>
+            </article>
+
+            {/* Been There */}
+            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="flex items-start justify-between mb-4">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 rounded-[var(--radius-full)]">
+                  Exploring
+                </span>
+              </div>
+              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
+                Been There
+              </h2>
+              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
+                Decentralized human-centered rental reputation: experiences, gossip verification, value-for-money ratings,
+                street and neighbor scores—not just listing photos. Includes a Gossip Verification Risk Engine for
+                risk scoring from crowdsourced claims.
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Real Estate
+                </span>
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Reputation
+                </span>
+              </div>
+            </article>
+
+            {/* Cherry */}
+            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="flex items-start justify-between mb-4">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 rounded-[var(--radius-full)]">
+                  Vision
+                </span>
+              </div>
+              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
+                Cherry
+              </h2>
+              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
+                A network for transforming grey urban surfaces into rooftop agriculture and regenerative infrastructure:
+                rooftop farming, localized food and energy, and city-scale collaboration.
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Urban Agriculture
+                </span>
+                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
+                  Sustainability
                 </span>
               </div>
             </article>

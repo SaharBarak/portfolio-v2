@@ -47,7 +47,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${archivo.variable} ${spaceGrotesk.variable} ${plusJakarta.variable} ${dmSans.variable} ${geistMono.variable} antialiased`}
-        style={{ background: 'transparent' }}
       >
         <ThemeProvider>
           <LenisProvider>

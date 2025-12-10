@@ -25,20 +25,53 @@ export default function AboutPage() {
           {/* Bio Section */}
           <section className="prose-section mb-16">
             <p className="font-body text-[var(--text-lg)] text-[color:var(--text)] leading-relaxed mb-6">
-              I&apos;m Sahar Barak, a software engineer passionate about creating technology that makes a positive impact.
-              I specialize in building products at the intersection of AI, clean energy, and developer tools.
+              I&apos;m a digital visual artist, entrepreneur, researcher, and developer passionate about building
+              innovative solutions at the intersection of technology and real-world impact. From AI-powered tools
+              to scientific research, I explore ideas that push boundaries and create value.
             </p>
 
             <p className="font-body text-[var(--text-lg)] text-[color:var(--text)] leading-relaxed mb-6">
-              Currently, I&apos;m focused on developing innovative solutions that help businesses and individuals
-              navigate the complexities of modern technology while maintaining a commitment to sustainability
-              and ethical practices.
+              I&apos;m a full-stack engineer obsessed with clean code, functional patterns, and architectures that
+              feel natural and scalable. My work sits at the crossroads of:
             </p>
 
+            <ul className="font-body text-[var(--text-lg)] text-[color:var(--text)] leading-relaxed mb-6 list-disc list-inside space-y-2">
+              <li>AI + physical infrastructure (cars, cities, food, energy)</li>
+              <li>Decentralization + governance (citizen majorities, identity, cooperative economies)</li>
+              <li>Networks, fractals, and collaborative systems</li>
+              <li>Cool/Artistic stuff that I enjoy</li>
+            </ul>
+
             <p className="font-body text-[var(--text-lg)] text-[color:var(--text)] leading-relaxed">
-              When I&apos;m not coding, you can find me exploring new ideas, contributing to open source projects,
-              or connecting with the global developer community.
+              Long-term, I&apos;m building an ecosystem of interoperable tools that let humans coordinate
+              more effectively than our current institutions allow.
             </p>
+          </section>
+
+          {/* Things I Love Section */}
+          <section className="mb-16">
+            <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
+              Things I Love
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {[
+                'Yoga', 'Sunsets', 'Kitesurfing', 'Motorbiking',
+                'Climbing', 'Nature', 'Running (barefoot)', 'Music',
+                'Makam', 'Oud', 'Guitar', 'Creating stuff',
+                'Building', 'Cars', 'Making', 'Tinkering',
+                'Electronics', 'Learning', 'Researching'
+              ].map((thing) => (
+                <div
+                  key={thing}
+                  className="p-3 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-xl text-center hover:shadow-md transition-shadow"
+                >
+                  <span className="font-body text-[var(--text-sm)] text-[color:var(--text-strong)]">
+                    {thing}
+                  </span>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Skills Section */}
@@ -75,7 +108,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               {/* Experience Item */}
               <div className="border-l-2 border-[color:var(--border)] pl-6 relative">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-[color:var(--primary)] rounded-full" />
+                <div className="absolute -left-2 top-0 w-4 h-4 bg-[color:var(--primary)] rounded-[var(--radius-full)]" />
                 <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)]">
                   Software Engineer
                 </h3>

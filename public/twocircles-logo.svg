@@ -1,0 +1,10 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Two Circles Studio Logo -->
+  <rect width="180" height="180" rx="37" fill="#FAF7F2"/>
+  <!-- Left circle - Orange -->
+  <circle cx="68" cy="90" r="48" fill="#FF6B35" opacity="0.9"/>
+  <!-- Right circle - Cyan -->
+  <circle cx="112" cy="90" r="48" fill="#00D9FF" opacity="0.9"/>
+  <!-- Intersection highlight -->
+  <path d="M90 49.2C104 62.4 112 75.2 112 90C112 104.8 104 117.6 90 130.8C76 117.6 68 104.8 68 90C68 75.2 76 62.4 90 49.2Z" fill="#FAF7F2" opacity="0.8"/>
+</svg>

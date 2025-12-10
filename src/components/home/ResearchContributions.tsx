@@ -5,23 +5,23 @@ import { motion } from "framer-motion";
 const research = [
   {
     title: "Detecting White Hydrogen Seeps by Examining Satellite Data",
-    description: "Using machine learning and satellite imagery to identify potential white hydrogen deposits for clean energy extraction."
+    description: "Using satellite imagery and geospatial ML to search for naturally occurring white hydrogen, exploring both scientific feasibility and climate implications."
   },
   {
     title: "Gossip Verification",
-    description: "A novel approach to verifying information spread through decentralized networks using cryptographic proofs."
+    description: "Turning human 'gossip' (reviews, experiences, warnings) into verifiable, abuse-resistant signals. The backbone for fair rental systems, landlord/roommate reputation, and risk engines."
   },
   {
     title: "Massive Context Tree Hashing",
-    description: "Efficient data structures for handling large-scale context in distributed systems."
+    description: "Hashing large histories—conversations, identity graphs, document trees—into structured, composable fingerprints that can be verified, compared, and reused."
   },
   {
     title: "SDS & Password Deprecation",
-    description: "Research into secure digital signatures as a replacement for traditional password-based authentication."
+    description: "Social Digital Signature. Exploring identity based on the structured hash of your personal data graph (social, listening habits, etc.), enabling passwordless login and stronger anti-sybil resistance."
   },
   {
     title: "SEL-DID",
-    description: "Self-Evolving Ledger Decentralized Identity - a framework for privacy-preserving identity management."
+    description: "Social / Self-Evident Layer DID. A DID model strengthened by cryptography + social structure + cross-platform behavior. Aiming for portable, hard-to-fake identity without a single platform owning you."
   }
 ];
 
@@ -64,7 +64,7 @@ export default function ResearchContributions() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          Thought Leadership
+          Research & Systems
         </motion.h2>
 
         {/* Subtitle */}
@@ -81,7 +81,7 @@ export default function ResearchContributions() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Research papers and ideas that sparked my interest and inspired me to bring them to life.
+          Where the academic-ish brain meets the builder brain.
         </motion.p>
 
         {/* Research Items */}

@@ -3,32 +3,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import gsap from 'gsap';
-import dynamic from 'next/dynamic';
+import { LINKS } from '@/config/links';
 
-// Dynamically import WebGL component to avoid SSR issues
-const SkyBackground = dynamic(() => import('./SkyBackground'), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-gradient-to-b from-[#7EC8E3] to-[#EAF6FC] dark:from-[#0B0B1A] dark:to-[#1E2A4A]" />
-  ),
-});
-
-// Roles definition with colors
+// Roles definition with colors - updated list
 const roles = [
+  { text: "software engineer", color: "#3B82F6" },
+  { text: "digital visual artist", color: "#EC4899" },
   { text: "builder", color: "#F43F5E" },
-  { text: "software engineer", color: "#F59E0B" },
-  { text: "full‑stack developer", color: "#10B981" },
-  { text: "backend developer", color: "#6366F1" },
-  { text: "designer", color: "#EC4899" },
+  { text: "researcher", color: "#8B5CF6" },
+  { text: "full-stack developer", color: "#10B981" },
 ];
 
-interface HeroSectionProps {
-  showScrollIndicator?: boolean;
-}
-
-const HeroSection: React.FC<HeroSectionProps> = ({
-  showScrollIndicator = true,
-}) => {
+const HeroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -99,25 +85,34 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       className="hero-section relative w-full h-screen flex items-center justify-center overflow-hidden"
       style={{ background: 'transparent' }}
     >
-      {/* WebGL Sky Background - No background color, transparent */}
-      <div className="absolute inset-0 z-0">
-        <SkyBackground />
-      </div>
-
       {/* Content */}
       <motion.div
-        className="hero-content relative z-10 text-center px-4 max-w-4xl mx-auto"
+        className="hero-content relative z-10 text-center px-[var(--space-6)]"
         style={{ y, opacity }}
+        role="banner"
+        aria-label="Hero section introducing Sahar Barak"
       >
+        {/* Greeting - h1: text-3xl to text-4xl */}
         <motion.h1
-          className="hero-title font-heading text-[var(--text-4xl)] md:text-[var(--text-5xl)] font-bold text-[color:var(--text-strong)] mb-6 leading-tight"
-          initial={{ opacity: 0, y: 30 }}
+          className="font-heading font-semibold tracking-[var(--tracking-tighter)] text-[color:var(--text-strong)]"
+          style={{ fontSize: 'clamp(var(--text-3xl), 5vw, var(--text-4xl))' }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.6 }}
         >
-          <span>Hi, I&apos;m Sahar Barak</span>
-          <br />
-          <span>a </span>
+          Hi, I&apos;m Sahar
+        </motion.h1>
+
+        {/* Role - h2: text-xl to text-2xl */}
+        <motion.h2
+          className="font-heading mt-[var(--space-2)]"
+          style={{ fontSize: 'clamp(var(--text-xl), 4vw, var(--text-2xl))' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <span
             ref={textRef}
             className="inline-block"
@@ -129,58 +124,66 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           >
             {currentRole.text}
           </span>
-        </motion.h1>
+          <motion.span
+            className="inline-block w-[2px] h-[1em] ml-0.5 align-text-bottom"
+            style={{ backgroundColor: currentRole.color }}
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+            aria-hidden="true"
+          />
+        </motion.h2>
 
-        <p
+        {/* Subtext - body: text-md */}
+        <motion.p
           ref={subtitleRef}
-          className="hero-subtitle font-body text-[var(--text-lg)] md:text-[var(--text-xl)] text-[color:var(--text)] max-w-2xl mx-auto opacity-0"
+          className="font-body text-[var(--text-md)] text-[color:var(--text-muted)] mt-[var(--space-6)] max-w-md mx-auto leading-[var(--leading-relaxed)]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Building elegant solutions at the intersection of AI, clean energy, and developer tools
-        </p>
+          Building at the intersection of AI, clean energy, and developer tools.
+        </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          className="hero-cta mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
+        {/* Buttons */}
+        <motion.nav
+          className="flex flex-wrap gap-[var(--space-3)] justify-center items-center mt-[var(--space-8)]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          aria-label="Primary actions"
         >
           <a
             href="#featured-work"
-            className="btn-primary px-8 py-3 bg-[color:var(--primary)] text-[color:var(--primary-foreground)] rounded-lg font-medium text-[var(--text-md)] hover:scale-105 transition-transform duration-300 shadow-lg"
+            className="hero-btn-primary px-[var(--space-4)] py-[var(--space-2)] text-[var(--text-sm)] font-medium rounded-[var(--radius-full)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+            aria-label="View featured work section"
           >
-            View Work
+            Featured Work
           </a>
+
           <a
-            href="/about"
-            className="btn-secondary px-8 py-3 border-2 border-[color:var(--border)] text-[color:var(--text-strong)] rounded-lg font-medium text-[var(--text-md)] hover:bg-[color:var(--accent)] transition-colors duration-300"
+            href={LINKS.external.twoCircleStudios}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group hero-btn-secondary flex items-center gap-[var(--space-2)] px-[var(--space-3)] py-[var(--space-2)] text-[var(--text-sm)] font-medium rounded-[var(--radius-full)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+            aria-label="Visit Two Circle Studios website (opens in new tab)"
           >
-            About Me
+            {/* Animated Two Circles Logo */}
+            <span className="relative w-[18px] h-[18px] flex-shrink-0" aria-hidden="true">
+              <span
+                className="absolute w-[12px] h-[12px] rounded-[var(--radius-full)] bg-[#FF6B35] opacity-90 top-[3px] left-[1px] transition-transform duration-[var(--transition-slow)] group-hover:-translate-x-[2px]"
+              />
+              <span
+                className="absolute w-[12px] h-[12px] rounded-[var(--radius-full)] bg-[#00D9FF] opacity-90 top-[3px] left-[5px] transition-transform duration-[var(--transition-slow)] group-hover:translate-x-[2px]"
+              />
+            </span>
+            Two Circle Studios
           </a>
-        </motion.div>
+        </motion.nav>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      {showScrollIndicator && (
-        <motion.div
-          className="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-        >
-          <motion.div
-            className="w-6 h-10 border-2 border-[color:var(--text-muted)] rounded-full flex justify-center pt-2"
-            animate={{ y: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-          >
-            <motion.div
-              className="w-1.5 h-1.5 bg-[color:var(--text-muted)] rounded-full"
-              animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-            />
-          </motion.div>
-        </motion.div>
-      )}
+      {/* Scroll & Star hover indicators moved to StarMap.tsx */}
+      {/* Twitter/X icon moved to SocialButton.tsx (rendered from SkyBackground) */}
+
     </section>
   );
 };

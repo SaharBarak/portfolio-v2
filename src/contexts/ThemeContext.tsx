@@ -2,9 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
+export type CloudMode = 'artistic' | 'realistic';
+
 interface ThemeContextType {
   isDarkMode: boolean;
   toggleTheme: (theme?: 'dark' | 'light') => void;
+  cloudMode: CloudMode;
+  setCloudMode: (mode: CloudMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -19,6 +23,7 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [cloudMode, setCloudModeState] = useState<CloudMode>('realistic');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -29,6 +34,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       setIsDarkMode(savedTheme === 'dark');
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setIsDarkMode(true);
+    }
+    // Check localStorage for cloud mode preference
+    const savedCloudMode = localStorage.getItem('cloudMode') as CloudMode | null;
+    if (savedCloudMode && (savedCloudMode === 'artistic' || savedCloudMode === 'realistic')) {
+      setCloudModeState(savedCloudMode);
     }
   }, []);
 
@@ -55,17 +65,22 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  const setCloudMode = useCallback((mode: CloudMode) => {
+    setCloudModeState(mode);
+    localStorage.setItem('cloudMode', mode);
+  }, []);
+
   // Prevent flash of incorrect theme
   if (!mounted) {
     return (
-      <ThemeContext.Provider value={{ isDarkMode: false, toggleTheme }}>
+      <ThemeContext.Provider value={{ isDarkMode: false, toggleTheme, cloudMode: 'artistic', setCloudMode }}>
         {children}
       </ThemeContext.Provider>
     );
   }
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, cloudMode, setCloudMode }}>
       {children}
     </ThemeContext.Provider>
   );
