@@ -106,8 +106,22 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
   const [activeConstellation, setActiveConstellation] = useState<string | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [mobileConstellationIndex, setMobileConstellationIndex] = useState(0);
   const [initialConstellationShown, setInitialConstellationShown] = useState(false);
+  const [isInHeroSection, setIsInHeroSection] = useState(true);
+
+  // Detect when within hero section (not scrolled past it)
+  useEffect(() => {
+    const handleScroll = () => {
+      // Hero section is roughly viewport height
+      const heroHeight = window.innerHeight * 0.9;
+      setIsInHeroSection(window.scrollY < heroHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Detect mobile/touch device
   useEffect(() => {
@@ -122,15 +136,15 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Show hint when dark mode is active (desktop only) - permanent, no auto-hide
+  // Show hint when dark mode is active and in hero section (desktop only)
   useEffect(() => {
-    if (isDark && !isMobile) {
+    if (isDark && !isMobile && isInHeroSection) {
       const timer = setTimeout(() => setShowHint(true), 2000);
       return () => clearTimeout(timer);
     } else {
       setShowHint(false);
     }
-  }, [isDark, isMobile]);
+  }, [isDark, isMobile, isInHeroSection]);
 
   // Calculate offset based on date
   const starOffset = useMemo(() => getStarOffset(date || new Date()), [date]);
@@ -196,9 +210,9 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
     return null;
   };
 
-  // Show initial constellation on first load (both desktop and mobile)
+  // Show initial constellation in hero section (both desktop and mobile)
   useEffect(() => {
-    if (!isDark || initialConstellationShown) return;
+    if (!isDark || !isInHeroSection || initialConstellationShown) return;
 
     // Show Virgo as initial constellation
     const initialConstellationId = 'Vir';
@@ -210,43 +224,19 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
         onConstellationHighlight(getConstellationDisplayData(initialConstellationId));
       }
 
-      // Auto-hide after 4 seconds on desktop (mobile will cycle)
-      if (!isMobile) {
-        setTimeout(() => {
-          setActiveConstellation(null);
-          if (onConstellationHighlight) {
-            onConstellationHighlight(null);
-          }
-        }, 4000);
-      }
-    }, 1500);
+      // Auto-hide after 4 seconds (both desktop and mobile)
+      setTimeout(() => {
+        setActiveConstellation(null);
+        if (onConstellationHighlight) {
+          onConstellationHighlight(null);
+        }
+      }, 4000);
+    }, 3500);
 
     return () => clearTimeout(showInitial);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDark, initialConstellationShown, isMobile]);
+  }, [isDark, isInHeroSection, initialConstellationShown, isMobile]);
 
-  // Mobile: Auto-cycle through constellations
-  useEffect(() => {
-    if (!isMobile || !isDark) return;
-
-    // Cycle to next constellation every 5 seconds
-    const cycleInterval = setInterval(() => {
-      setMobileConstellationIndex(prev => {
-        const nextIndex = (prev + 1) % CONSTELLATION_IDS.length;
-        const constellationId = CONSTELLATION_IDS[nextIndex];
-        setActiveConstellation(constellationId);
-        if (onConstellationHighlight) {
-          onConstellationHighlight(getConstellationDisplayData(constellationId));
-        }
-        return nextIndex;
-      });
-    }, 5000);
-
-    return () => {
-      clearInterval(cycleInterval);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, isDark, starOffset]);
 
   // Handle hover - show constellation immediately
   const handleMouseEnter = (star: (typeof ALL_NAMED_STARS)[0]) => {
@@ -310,13 +300,14 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
   return (
     <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 5 }}>
       {/* Invisible hover targets only - stars rendered in shader */}
+      {/* Only interactive after scrolling past hero section */}
       {offsetStars.map((star, index) => {
         // Larger hitbox for brighter stars
         const hitboxSize = star.magnitude < 1 ? 50 : star.magnitude < 2 ? 42 : star.magnitude < 3 ? 36 : 30;
         return (
           <div
             key={`${star.id}-${index}`}
-            className="absolute pointer-events-auto cursor-crosshair"
+            className={`absolute cursor-crosshair ${isInHeroSection ? 'pointer-events-auto' : 'pointer-events-none'}`}
             style={{
               left: `${star.x * 100}%`,
               bottom: `${star.y * 100}%`,

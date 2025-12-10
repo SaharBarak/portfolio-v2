@@ -18,7 +18,7 @@ export default function IdeasPage() {
       <main className="px-4 lg:px-8 py-16">
         <div className="max-w-4xl mx-auto">
           {/* Page Title */}
-          <h1 className="font-heading text-[var(--text-4xl)] font-bold text-[color:var(--text-strong)] mb-4">
+          <h1 className="font-heading font-bold text-[color:var(--text-strong)] mb-4" style={{ fontSize: 'clamp(1.75rem, 6vw, var(--text-4xl))' }}>
             Ideas
           </h1>
 

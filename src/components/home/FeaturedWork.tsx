@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
 interface Project {
@@ -276,7 +276,7 @@ export default function FeaturedWork() {
             id="featured-work-title"
             className="font-heading font-black tracking-tight"
             style={{
-              fontSize: 'var(--text-6xl)',
+              fontSize: 'clamp(2rem, 8vw, var(--text-6xl))',
               lineHeight: 'var(--leading-none)',
               color: 'var(--current-text-bold)',
               marginBottom: 'var(--space-4)',
@@ -293,7 +293,7 @@ export default function FeaturedWork() {
           <motion.p
             className="max-w-2xl"
             style={{
-              fontSize: 'var(--text-xl)',
+              fontSize: 'var(--text-base)',
               lineHeight: 'var(--leading-relaxed)',
               color: 'var(--current-text-light)',
               marginTop: 'var(--space-4)',

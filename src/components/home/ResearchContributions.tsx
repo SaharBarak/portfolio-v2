@@ -1,139 +1,534 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const research = [
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+interface ResearchLink {
+  type: 'github' | 'huggingface' | 'arxiv' | 'linkedin' | 'twitter' | 'devto' | 'demo' | 'paper';
+  url: string;
+  label?: string;
+}
+
+type ResearchField = 'ML' | 'Blockchain' | 'Cryptography' | 'Identity' | 'LLM' | 'Clean Energy';
+
+interface ResearchItem {
+  title: string;
+  subtitle: string;
+  description: string;
+  status: 'active' | 'research' | 'concept';
+  field: ResearchField;
+  references?: string[];
+  links: ResearchLink[];
+}
+
+const fieldColors: Record<ResearchField, string> = {
+  'ML': '#f59e0b',
+  'Blockchain': '#3b82f6',
+  'Cryptography': '#ec4899',
+  'Identity': '#8b5cf6',
+  'LLM': '#10b981',
+  'Clean Energy': '#22d3ee',
+};
+
+const research: ResearchItem[] = [
   {
-    title: "Detecting White Hydrogen Seeps by Examining Satellite Data",
-    description: "Using satellite imagery and geospatial ML to search for naturally occurring white hydrogen, exploring both scientific feasibility and climate implications."
+    title: "White Hydrogen Detection",
+    subtitle: "Geospatial ML for Natural Hydrogen Discovery",
+    description: "Applying satellite imagery analysis and machine learning to identify naturally occurring white hydrogen seeps—a potentially game-changing clean energy source. Research focuses on spectral signatures, geological correlates, and scalable detection pipelines.",
+    status: 'research',
+    field: 'Clean Energy',
+    references: [
+      "Zgonnik, V. (2020). The occurrence and geoscience of natural hydrogen",
+      "Prinzhofer, A. et al. (2018). Discovery of large hydrogen seep in Mali"
+    ],
+    links: [
+      { type: 'github', url: 'https://github.com/SaharBarak', label: 'Code' },
+      { type: 'paper', url: '#', label: 'Draft' },
+      { type: 'linkedin', url: 'https://linkedin.com/in/saharbarak', label: 'Article' },
+    ],
   },
   {
-    title: "Gossip Verification",
-    description: "Turning human 'gossip' (reviews, experiences, warnings) into verifiable, abuse-resistant signals. The backbone for fair rental systems, landlord/roommate reputation, and risk engines."
+    title: "Gossip Verification Protocol",
+    subtitle: "Abuse-Resistant Reputation from Human Signals",
+    description: "A cryptographic protocol for transforming informal human signals—reviews, warnings, endorsements—into verifiable, sybil-resistant reputation scores. Designed for rental markets, hiring, and trust networks where traditional verification fails.",
+    status: 'active',
+    field: 'Cryptography',
+    references: [
+      "Resnick, P. et al. (2000). Reputation Systems",
+      "Kamvar, S. et al. (2003). The EigenTrust Algorithm"
+    ],
+    links: [
+      { type: 'github', url: 'https://github.com/SaharBarak', label: 'Spec' },
+      { type: 'arxiv', url: '#', label: 'Preprint' },
+      { type: 'twitter', url: 'https://twitter.com/SaharBarak', label: 'Thread' },
+    ],
   },
   {
     title: "Massive Context Tree Hashing",
-    description: "Hashing large histories—conversations, identity graphs, document trees—into structured, composable fingerprints that can be verified, compared, and reused."
+    subtitle: "Composable Fingerprints for Large Histories",
+    description: "Novel hashing scheme for representing large conversation histories, identity graphs, and document trees as compact, composable fingerprints. Enables verification and selective disclosure without transmitting full context.",
+    status: 'concept',
+    field: 'LLM',
+    references: [
+      "Merkle, R. (1987). A Digital Signature Based on a Conventional Encryption Function",
+      "Benet, J. (2014). IPFS - Content Addressed, Versioned, P2P File System"
+    ],
+    links: [
+      { type: 'devto', url: 'https://dev.to/saharbarak', label: 'Explainer' },
+      { type: 'github', url: 'https://github.com/SaharBarak', label: 'RFC' },
+    ],
   },
   {
-    title: "SDS & Password Deprecation",
-    description: "Social Digital Signature. Exploring identity based on the structured hash of your personal data graph (social, listening habits, etc.), enabling passwordless login and stronger anti-sybil resistance."
+    title: "Social Digital Signature (SDS)",
+    subtitle: "Graph-Based Identity Authentication",
+    description: "Authentication mechanism derived from the unique structure of a user's social and data graph. Provides passwordless login and strong anti-sybil guarantees without relying on centralized identity providers or biometrics.",
+    status: 'research',
+    field: 'Identity',
+    references: [
+      "Naor, M. (1996). Verification of a Human in the Loop",
+      "Douceur, J. (2002). The Sybil Attack"
+    ],
+    links: [
+      { type: 'arxiv', url: 'https://arxiv.org', label: 'Paper' },
+      { type: 'huggingface', url: 'https://huggingface.co/SaharBarak', label: 'Model' },
+      { type: 'demo', url: '#', label: 'Demo' },
+    ],
   },
   {
     title: "SEL-DID",
-    description: "Social / Self-Evident Layer DID. A DID model strengthened by cryptography + social structure + cross-platform behavior. Aiming for portable, hard-to-fake identity without a single platform owning you."
+    subtitle: "Self-Evident Layer Decentralized Identifier",
+    description: "A portable identity standard combining cryptographic proofs with social graph attestations. Your identity travels with you across platforms, strengthened by cross-platform behavioral consistency rather than any single authority.",
+    status: 'active',
+    field: 'Blockchain',
+    references: [
+      "W3C DID Core Specification (2022)",
+      "Allen, C. (2016). The Path to Self-Sovereign Identity"
+    ],
+    links: [
+      { type: 'github', url: 'https://github.com/SaharBarak', label: 'Repo' },
+      { type: 'paper', url: '#', label: 'Whitepaper' },
+      { type: 'demo', url: '#', label: 'Demo' },
+    ],
   }
 ];
 
+const linkIcons: Record<string, JSX.Element> = {
+  github: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+    </svg>
+  ),
+  huggingface: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5a8.5 8.5 0 110 17 8.5 8.5 0 010-17zM8.5 9a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm7 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-7.5 6s1 2 4 2 4-2 4-2"/>
+    </svg>
+  ),
+  arxiv: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
+    </svg>
+  ),
+  linkedin: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  ),
+  twitter: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  ),
+  devto: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .65-.08.84-.23.21-.17.31-.48.31-.95v-2c0-.47-.1-.77-.31-.95zM0 4v16h24V4H0zm8.56 11.15c-.24.36-.66.56-1.14.56H5.08V8.29h2.28c.55 0 .98.18 1.22.54.24.36.37.93.37 1.7v2.92c0 .75-.12 1.33-.39 1.7zm5.03-5.08h-2.1v1.95h1.52v1.26h-1.52v1.95h2.1v1.26h-2.89V8.29h2.89v1.78zm5.08 5.93c-.3.46-.73.69-1.31.69-.53 0-.93-.16-1.2-.49-.27-.33-.41-.85-.41-1.55V9.52c0-.73.13-1.26.4-1.59.28-.34.68-.51 1.21-.51.58 0 1.01.23 1.31.69.3.46.45 1.13.45 2.02v1.5c0 .89-.15 1.56-.45 2.02z"/>
+    </svg>
+  ),
+  demo: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+    </svg>
+  ),
+  paper: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/>
+      <line x1="16" y1="17" x2="8" y2="17"/>
+      <polyline points="10 9 9 9 8 9"/>
+    </svg>
+  ),
+};
+
+const statusColors: Record<string, { bg: string; text: string; label: string }> = {
+  active: { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Active' },
+  research: { bg: 'rgba(6, 182, 212, 0.15)', text: '#06b6d4', label: 'Research' },
+  concept: { bg: 'rgba(168, 85, 247, 0.15)', text: '#a855f7', label: 'Concept' },
+};
+
+function ResearchCard({ item, index }: { item: ResearchItem; index: number }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const status = statusColors[item.status];
+  const fieldColor = fieldColors[item.field];
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+
+    const card = cardRef.current;
+
+    // Set initial state
+    gsap.set(card, { opacity: 0, y: 30 });
+
+    // Create scroll trigger animation
+    ScrollTrigger.create({
+      trigger: card,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        gsap.to(card, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: index * 0.08,
+          ease: "power3.out",
+        });
+      },
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === card) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [index]);
+
+  // Animate expand/collapse
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    gsap.to(contentRef.current, {
+      height: isExpanded ? 'auto' : 0,
+      opacity: isExpanded ? 1 : 0,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }, [isExpanded]);
+
+  return (
+    <article
+      ref={cardRef}
+      className="group relative cursor-pointer"
+      onClick={() => setIsExpanded(!isExpanded)}
+      style={{
+        padding: 'var(--space-5) var(--space-6)',
+        marginLeft: 'calc(-1 * var(--space-6))',
+        marginRight: 'calc(-1 * var(--space-6))',
+        borderRadius: '8px',
+        backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.03)' : 'transparent',
+        border: '1px solid',
+        borderColor: isExpanded ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+        transition: 'all 0.3s ease',
+      }}
+    >
+      {/* Header row - always visible */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          {/* Labels row */}
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            {/* Field label */}
+            <span
+              className="px-2 py-0.5 rounded-full"
+              style={{
+                fontSize: '0.6rem',
+                fontWeight: 600,
+                color: fieldColor,
+                backgroundColor: `${fieldColor}15`,
+                letterSpacing: '0.02em',
+              }}
+            >
+              {item.field}
+            </span>
+            {/* Status label */}
+            <span
+              className="uppercase tracking-wider"
+              style={{
+                fontSize: '0.55rem',
+                fontWeight: 600,
+                color: status.text,
+                letterSpacing: '0.08em',
+              }}
+            >
+              {status.label}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3
+            className="font-heading font-bold transition-colors duration-300"
+            style={{
+              fontSize: 'var(--text-lg)',
+              color: isExpanded ? '#ffffff' : 'rgba(255, 255, 255, 0.9)',
+              lineHeight: 1.3,
+            }}
+          >
+            {item.title}
+          </h3>
+
+          {/* Subtitle - always visible */}
+          <p
+            className="font-medium transition-colors duration-300 mt-1"
+            style={{
+              fontSize: 'var(--text-sm)',
+              color: 'rgba(255, 255, 255, 0.5)',
+            }}
+          >
+            {item.subtitle}
+          </p>
+        </div>
+
+        {/* Expand/collapse indicator */}
+        <div
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+          style={{
+            backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+          }}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            style={{
+              color: 'rgba(255, 255, 255, 0.5)',
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.3s ease',
+            }}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Expandable content */}
+      <div
+        ref={contentRef}
+        style={{
+          height: 0,
+          opacity: 0,
+          overflow: 'hidden',
+        }}
+      >
+        <div style={{ paddingTop: 'var(--space-4)' }}>
+          {/* Description */}
+          <p
+            style={{
+              fontSize: 'var(--text-sm)',
+              lineHeight: 1.75,
+              color: 'rgba(255, 255, 255, 0.65)',
+              marginBottom: 'var(--space-4)',
+            }}
+          >
+            {item.description}
+          </p>
+
+          {/* References */}
+          {item.references && item.references.length > 0 && (
+            <div className="mb-4">
+              <span
+                className="uppercase tracking-wider block mb-2"
+                style={{
+                  fontSize: '0.6rem',
+                  fontWeight: 600,
+                  color: 'rgba(255, 255, 255, 0.35)',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                References
+              </span>
+              <div className="space-y-1">
+                {item.references.map((ref, i) => (
+                  <p
+                    key={i}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'rgba(255, 255, 255, 0.45)',
+                      fontStyle: 'italic',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {ref}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Links row */}
+          <div
+            className="flex items-center gap-4 pt-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {item.links.map((link, i) => (
+              <a
+                key={i}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 transition-all duration-200 hover:text-white hover:translate-x-0.5"
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  color: 'rgba(255, 255, 255, 0.5)',
+                }}
+              >
+                <span className="opacity-70">{linkIcons[link.type]}</span>
+                <span>{link.label || link.type}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function ResearchContributions() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || !labelRef.current || !headingRef.current || !subtitleRef.current) return;
+
+    const elements = [labelRef.current, headingRef.current, subtitleRef.current];
+
+    // Set initial states
+    elements.forEach((el, i) => {
+      gsap.set(el, { opacity: 0, y: 20 });
+    });
+
+    // Create scroll trigger for header elements
+    ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 80%",
+      once: true,
+      onEnter: () => {
+        elements.forEach((el, i) => {
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: i * 0.1,
+            ease: "power3.out",
+          });
+        });
+      },
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
+
   return (
     <section
-      className="w-full relative section-dark"
+      ref={sectionRef}
+      className="w-full relative overflow-hidden"
       style={{ padding: 'var(--space-48) var(--space-8)' }}
       aria-labelledby="research-title"
     >
-      <div className="max-w-5xl mx-auto">
+      {/* Cinematic background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse 100% 70% at 50% -20%, rgba(6, 182, 212, 0.06) 0%, transparent 60%),
+            radial-gradient(ellipse 80% 50% at 100% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+            linear-gradient(180deg, #09090b 0%, #0c0c10 50%, #09090b 100%)
+          `,
+        }}
+      />
+
+      {/* Noise texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.015]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Label */}
-        <motion.span
-          className="inline-block text-cyan-500 font-semibold uppercase"
+        <span
+          ref={labelRef}
+          className="inline-block text-cyan-500 font-medium uppercase"
           style={{
-            fontSize: 'var(--text-xs)',
-            letterSpacing: 'var(--tracking-widest)',
-            marginBottom: 'var(--space-8)',
+            fontSize: '0.6875rem',
+            letterSpacing: '0.1em',
+            marginBottom: 'var(--space-3)',
           }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
         >
           Research & Ideas
-        </motion.span>
+        </span>
 
         {/* Main Heading */}
-        <motion.h2
+        <h2
+          ref={headingRef}
           id="research-title"
           className="font-heading font-black tracking-tight"
           style={{
-            fontSize: 'var(--text-6xl)',
+            fontSize: 'clamp(2rem, 8vw, var(--text-6xl))',
             lineHeight: 'var(--leading-none)',
             color: 'var(--current-text-bold)',
-            marginBottom: 'var(--space-8)',
+            marginBottom: 'var(--space-4)',
           }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
         >
           Research & Systems
-        </motion.h2>
+        </h2>
 
         {/* Subtitle */}
-        <motion.p
+        <p
+          ref={subtitleRef}
           className="max-w-2xl"
           style={{
-            fontSize: 'var(--text-xl)',
+            fontSize: 'var(--text-base)',
             lineHeight: 'var(--leading-relaxed)',
             color: 'var(--current-text-light)',
-            marginBottom: 'var(--space-32)',
+            marginBottom: 'var(--space-12)',
           }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Where the academic-ish brain meets the builder brain.
-        </motion.p>
+          Where the academic-ish brain meets the builder brain. Exploring ideas at the intersection of cryptography, identity, and distributed systems.
+        </p>
 
-        {/* Research Items */}
-        <div>
+        {/* Research List - alternating alignment for visual rhythm */}
+        <div className="flex flex-col gap-8">
           {research.map((item, index) => (
-            <motion.article
+            <div
               key={index}
-              className="border-t group cursor-pointer"
               style={{
-                borderColor: 'var(--card-border)',
-                padding: 'var(--space-12) 0',
+                marginLeft: index % 2 === 1 ? 'var(--space-8)' : '0',
+                marginRight: index % 2 === 0 ? 'var(--space-8)' : '0',
               }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="md:max-w-[85%]"
             >
-              <div className="flex items-start justify-between" style={{ gap: 'var(--space-8)' }}>
-                <div className="flex-1">
-                  <h3
-                    className="font-heading font-semibold group-hover:opacity-70 transition-opacity"
-                    style={{
-                      fontSize: 'var(--text-2xl)',
-                      color: 'var(--current-text-bold)',
-                      marginBottom: 'var(--space-4)',
-                      lineHeight: 'var(--leading-snug)',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: 'var(--text-md)',
-                      lineHeight: 'var(--leading-relaxed)',
-                      color: 'var(--current-text-light)',
-                      maxWidth: '40rem',
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                </div>
-                <span
-                  className="opacity-0 group-hover:opacity-100 transition-all duration-300 shrink-0 group-hover:translate-x-2"
-                  style={{
-                    fontSize: 'var(--text-3xl)',
-                    color: 'var(--current-text-light)',
-                  }}
-                >
-                  →
-                </span>
-              </div>
-            </motion.article>
+              <ResearchCard item={item} index={index} />
+            </div>
           ))}
         </div>
       </div>

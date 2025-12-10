@@ -17,55 +17,6 @@ const SkyBackground = dynamic(() => import('@/components/hero/SkyBackground'), {
 export default function Home() {
   return (
     <>
-      {/* SVG Filter for Liquid Glass Effect */}
-      <svg style={{ display: 'none' }} aria-hidden="true">
-        <defs>
-          <filter
-            id="liquid-glass-filter"
-            x="0%"
-            y="0%"
-            width="100%"
-            height="100%"
-            filterUnits="objectBoundingBox"
-          >
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.015 0.015"
-              numOctaves="2"
-              seed="3"
-              result="turbulence"
-            />
-            <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
-            <feSpecularLighting
-              in="softMap"
-              surfaceScale="3"
-              specularConstant="0.8"
-              specularExponent="80"
-              lightingColor="white"
-              result="specLight"
-            >
-              <fePointLight x="-100" y="-100" z="200" />
-            </feSpecularLighting>
-            <feComposite
-              in="specLight"
-              operator="arithmetic"
-              k1="0"
-              k2="1"
-              k3="1"
-              k4="0"
-              result="litImage"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="softMap"
-              scale="12"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       {/* Sky Background - at root level to avoid transform containment */}
       <SkyBackground />
 
@@ -73,10 +24,7 @@ export default function Home() {
       <SplashScreen />
 
       {/* Header - Fixed above everything */}
-      <div className="header-wrapper fixed top-0 left-0 right-0 z-50">
-        <div className="liquid-glass-effect" />
-        <div className="liquid-glass-tint" />
-        <div className="liquid-glass-shine" />
+      <div className="header-wrapper fixed top-0 left-0 right-0 z-50 pt-2 pl-2 md:pt-0 md:pl-0">
         <Header />
       </div>
 
@@ -103,7 +51,7 @@ export default function Home() {
             <h2
               className="font-heading font-black tracking-tight leading-none"
               style={{
-                fontSize: 'var(--text-5xl)',
+                fontSize: 'clamp(1.75rem, 7vw, var(--text-5xl))',
                 color: 'var(--current-text-bold)',
                 marginBottom: 'var(--space-8)',
               }}

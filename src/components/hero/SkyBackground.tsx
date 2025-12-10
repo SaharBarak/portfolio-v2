@@ -773,129 +773,67 @@ function IQClouds({ isDark, moonData, currentDate, constellationLines, constella
             // Select matrix based on cloud mode (0 = artistic/spiral, 1 = realistic/horizontal)
             mat2 cloudMatrix = uCloudMode > 0.5 ? mRealistic : mArtistic;
 
-            float q, r, f, c, c1;
+            float q = fbm((uv + drift * 0.5) * cloudscale * 0.5);
 
-            // Mobile: simplified 4-iteration cloud (faster but visible)
-            // Desktop: full 8-iteration cloud (detailed)
-            if (uIsMobile > 0.5) {
-              // Simplified mobile clouds - fewer iterations but boosted amplitude
-              q = 0.0;
-              vec2 qUv = (uv + drift * 0.5) * cloudscale * 0.5;
-              float amp = 0.15; // Increased from 0.1
-              for (int i = 0; i < 4; i++) {
-                q += noise(qUv) * amp;
-                qUv = cloudMatrix * qUv;
-                amp *= 0.5; // Slower falloff
-              }
-
-              r = 0.0;
-              vec2 cloudUv = (uv + drift) * cloudscale - q;
-              float weight = 1.0; // Increased from 0.8
-              for (int i = 0; i < 4; i++) {
-                r += abs(weight * noise(cloudUv));
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.7;
-              }
-
-              f = 0.0;
-              cloudUv = (uv + drift) * cloudscale - q;
-              weight = 0.9; // Increased from 0.7
-              for (int i = 0; i < 4; i++) {
-                f += weight * noise(cloudUv);
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.65;
-              }
-
-              f *= r + f;
-              f *= 1.4; // Boost mobile cloud density
-
-              c = 0.0;
-              vec2 drift2 = vec2(time * 1.2, 0.0);
-              cloudUv = (uv + drift2) * cloudscale * 2.0 - q;
-              weight = 0.5; // Increased from 0.4
-              for (int i = 0; i < 4; i++) {
-                c += weight * noise(cloudUv);
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.65;
-              }
-
-              c1 = 0.0;
-              vec2 drift3 = vec2(time * 1.5, 0.0);
-              cloudUv = (uv + drift3) * cloudscale * 3.0 - q;
-              weight = 0.5; // Increased from 0.4
-              for (int i = 0; i < 4; i++) {
-                c1 += abs(weight * noise(cloudUv));
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.65;
-              }
-
-              c += c1;
-              c *= 1.3; // Boost mobile cloud color variation
-            } else {
-              // Desktop: full quality clouds
-              q = fbm((uv + drift * 0.5) * cloudscale * 0.5);
-
-              // Ridged noise shape
-              r = 0.0;
-              vec2 cloudUv = (uv + drift) * cloudscale;
-              cloudUv -= q;
-              float weight = 0.8;
-              for (int i = 0; i < 8; i++) {
-                r += abs(weight * noise(cloudUv));
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.7;
-              }
-
-              // Noise shape
-              f = 0.0;
-              cloudUv = (uv + drift) * cloudscale;
-              cloudUv -= q;
-              weight = 0.7;
-              for (int i = 0; i < 8; i++) {
-                f += weight * noise(cloudUv);
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.6;
-              }
-
-              f *= r + f;
-
-              // Noise colour
-              c = 0.0;
-              vec2 drift2 = vec2(time * 1.2, 0.0);
-              cloudUv = (uv + drift2) * cloudscale * 2.0;
-              cloudUv -= q;
-              weight = 0.4;
-              for (int i = 0; i < 7; i++) {
-                c += weight * noise(cloudUv);
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.6;
-              }
-
-              // Noise ridge colour
-              c1 = 0.0;
-              vec2 drift3 = vec2(time * 1.5, 0.0);
-              cloudUv = (uv + drift3) * cloudscale * 3.0;
-              cloudUv -= q;
-              weight = 0.4;
-              for (int i = 0; i < 7; i++) {
-                c1 += abs(weight * noise(cloudUv));
-                cloudUv = cloudMatrix * cloudUv;
-                weight *= 0.6;
-              }
-
-              c += c1;
+            // Ridged noise shape
+            float r = 0.0;
+            vec2 cloudUv = (uv + drift) * cloudscale;
+            cloudUv -= q;
+            float weight = 0.8;
+            for (int i = 0; i < 8; i++) {
+              r += abs(weight * noise(cloudUv));
+              cloudUv = cloudMatrix * cloudUv;
+              weight *= 0.7;
             }
+
+            // Noise shape
+            float f = 0.0;
+            cloudUv = (uv + drift) * cloudscale;
+            cloudUv -= q;
+            weight = 0.7;
+            for (int i = 0; i < 8; i++) {
+              f += weight * noise(cloudUv);
+              cloudUv = cloudMatrix * cloudUv;
+              weight *= 0.6;
+            }
+
+            f *= r + f;
+
+            // Noise colour
+            float c = 0.0;
+            vec2 drift2 = vec2(time * 1.2, 0.0);
+            cloudUv = (uv + drift2) * cloudscale * 2.0;
+            cloudUv -= q;
+            weight = 0.4;
+            for (int i = 0; i < 7; i++) {
+              c += weight * noise(cloudUv);
+              cloudUv = cloudMatrix * cloudUv;
+              weight *= 0.6;
+            }
+
+            // Noise ridge colour
+            float c1 = 0.0;
+            vec2 drift3 = vec2(time * 1.5, 0.0);
+            cloudUv = (uv + drift3) * cloudscale * 3.0;
+            cloudUv -= q;
+            weight = 0.4;
+            for (int i = 0; i < 7; i++) {
+              c1 += abs(weight * noise(cloudUv));
+              cloudUv = cloudMatrix * cloudUv;
+              weight *= 0.6;
+            }
+
+            c += c1;
 
             // Cloud colour - soft white/blue for day, dark blue-gray for night
             vec3 dayCloudColor = vec3(0.95, 0.97, 1.0);  // Slightly blue-tinted white clouds
             vec3 nightCloudColor = vec3(0.08, 0.10, 0.15);
+
             vec3 cloudcolour = mix(dayCloudColor, nightCloudColor, uIsDark);
             cloudcolour *= clamp((clouddark + cloudlight * c), 0.0, 1.0);
 
             // Cloud coverage - slightly less at night
-            float coverDay = cloudcover;
-            float coverNight = cloudcover * 0.7;
-            float cover = mix(coverDay, coverNight, uIsDark);
+            float cover = mix(cloudcover, cloudcover * 0.7, uIsDark);
 
             f = cover + cloudalpha * f * r;
 
@@ -1141,6 +1079,7 @@ function PostProcessing({ isDark, moonPhase, isMobile }: { isDark: boolean; moon
   );
 }
 
+
 // ============================================
 // MAIN EXPORT - Fullscreen fixed
 // ============================================
@@ -1155,7 +1094,7 @@ export default function SkyBackground() {
   const fadeAnimationRef = useRef<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile devices for performance optimization
+  // Detect mobile for post-processing toggle only
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.matchMedia('(max-width: 768px)').matches ||
