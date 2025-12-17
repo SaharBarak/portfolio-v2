@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { useProjects } from "@/hooks/useContent";
 
 interface Project {
   title: string;
@@ -18,7 +19,8 @@ interface Project {
   };
 }
 
-const projects: Project[] = [
+// Fallback data for when Convex is loading or unavailable
+const fallbackProjects: Project[] = [
   {
     title: "Wessley AI",
     subtitle: "Virtual Garage",
@@ -246,6 +248,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export default function FeaturedWork() {
+  const convexProjects = useProjects();
+
+  // Map Convex data to component format, fallback to static data while loading
+  const projects: Project[] = convexProjects
+    ? convexProjects.map((p) => ({
+        title: p.title,
+        subtitle: p.subtitle,
+        description: p.description,
+        link: p.url,
+        logo: p.logo || "/ventures/default-logo.svg",
+        brandColors: {
+          bg: p.colors.bg,
+          accent: p.colors.accent,
+          text: p.colors.text,
+          textMuted: p.colors.textMuted || "rgba(255,255,255,0.5)",
+        },
+      }))
+    : fallbackProjects;
+
   return (
     <section
       id="featured-work"

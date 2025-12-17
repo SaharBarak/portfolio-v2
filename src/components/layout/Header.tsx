@@ -48,10 +48,19 @@ const Header = () => {
     };
   }, []);
 
-  // Scroll detection for blur background
+  // Scroll detection for blur background (RAF throttled)
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 50;
+          setIsScrolled(prev => prev !== scrolled ? scrolled : prev);
+          ticking = false;
+        });
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

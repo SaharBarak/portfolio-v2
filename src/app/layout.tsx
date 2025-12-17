@@ -3,6 +3,7 @@ import { Archivo, Plus_Jakarta_Sans, Space_Grotesk, DM_Sans, Geist_Mono } from "
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LenisProvider } from "@/contexts/LenisContext";
+import { ConvexProvider } from "@/contexts/ConvexProvider";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -49,11 +50,13 @@ export default function RootLayout({
         className={`${archivo.variable} ${spaceGrotesk.variable} ${plusJakarta.variable} ${dmSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>
-          <LenisProvider>
-            {children}
-          </LenisProvider>
-        </ThemeProvider>
+        <ConvexProvider>
+          <ThemeProvider>
+            <LenisProvider>
+              {children}
+            </LenisProvider>
+          </ThemeProvider>
+        </ConvexProvider>
       </body>
     </html>
   );

@@ -1465,6 +1465,27 @@ html {
 }
 
 /* ============================================
+   SCROLL PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* GPU-accelerate fixed background elements */
+.sky-background {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: strict;
+}
+
+/* Content containment for sections below the fold */
+section {
+  contain: layout style;
+}
+
+/* Reduce paint areas during scroll */
+main {
+  contain: layout;
+}
+
+/* ============================================
    CUSTOM CURSORS
    ============================================ */
 
