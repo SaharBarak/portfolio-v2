@@ -5,8 +5,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/hero/HeroSection';
 import FeaturedWork from '@/components/home/FeaturedWork';
+import FreelanceShowcase from '@/components/home/FreelanceShowcase';
 import ResearchContributions from '@/components/home/ResearchContributions';
 import OpenSourceCode from '@/components/home/OpenSourceCode';
+import BlogPreview from '@/components/home/BlogPreview';
 import SplashScreen from '@/components/SplashScreen';
 
 // Import SkyBackground at root level to avoid transform issues
@@ -36,11 +38,17 @@ export default function Home() {
         {/* Featured Work Section */}
         <FeaturedWork />
 
+        {/* Freelance/Client Work Section */}
+        <FreelanceShowcase />
+
         {/* Research & Contributions Section */}
         <ResearchContributions />
 
         {/* Open Source Code Section */}
         <OpenSourceCode />
+
+        {/* Blog Preview Section */}
+        <BlogPreview />
 
         {/* Contact/CTA Section */}
         <section

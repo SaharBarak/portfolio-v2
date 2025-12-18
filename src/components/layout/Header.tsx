@@ -8,7 +8,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useLenis } from '@/contexts/LenisContext';
 import gsap from 'gsap';
 import { LINKS } from '@/config/links';
-import LiquidGlass from './LiquidGlass';
 
 const Header = () => {
   const pathname = usePathname();
@@ -176,6 +175,12 @@ const Header = () => {
           href="/now"
         >
           now
+        </Link>
+        <Link
+          className={`ain-link is-blog ${isActivePage('/blog') ? 'is-active' : ''}`}
+          href="/blog"
+        >
+          blog
         </Link>
 
         {/* AIN Info Link */}
