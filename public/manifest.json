@@ -1,0 +1,26 @@
+{
+  "name": "Sahar Barak | Software Engineer",
+  "short_name": "Sahar Barak",
+  "description": "Software Engineer building at the intersection of AI, clean energy, and developer tools",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#3B82F6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo196.png",
+      "sizes": "196x196",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "technology", "developer"],
+  "lang": "en"
+}

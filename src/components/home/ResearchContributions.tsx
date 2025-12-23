@@ -230,7 +230,7 @@ function ResearchListItem({
             className="font-heading font-bold text-left"
             style={{
               fontSize: 'var(--text-base)',
-              color: isSelected ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.8)',
+              color: isSelected ? 'var(--current-text-bold)' : 'var(--current-text-normal)',
               lineHeight: 1.3,
             }}
           >
@@ -240,7 +240,7 @@ function ResearchListItem({
             className="text-left mt-1"
             style={{
               fontSize: 'var(--text-xs)',
-              color: 'rgba(255, 255, 255, 0.45)',
+              color: 'var(--text-muted)',
               lineHeight: 1.4,
             }}
           >
@@ -257,7 +257,7 @@ function ResearchListItem({
               target="_blank"
               rel="noopener noreferrer"
               className="research-link"
-              style={{ color: 'rgba(255, 255, 255, 0.35)' }}
+              style={{ color: 'var(--text-muted)' }}
               title={link.label || link.type}
               onClick={(e) => e.stopPropagation()}
             >
@@ -269,7 +269,7 @@ function ResearchListItem({
           <div
             className="w-7 h-7 rounded-full flex items-center justify-center"
             style={{
-              backgroundColor: isSelected ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+              backgroundColor: isSelected ? 'var(--surface-active)' : 'var(--surface-subtle)',
               transition: 'background-color 0.15s ease',
             }}
           >
@@ -281,7 +281,7 @@ function ResearchListItem({
               stroke="currentColor"
               strokeWidth="2"
               style={{
-                color: 'rgba(255, 255, 255, 0.5)',
+                color: 'var(--text-muted)',
                 transform: isSelected ? 'rotate(90deg)' : 'rotate(0deg)',
                 transition: 'transform 0.2s ease',
               }}
@@ -411,7 +411,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
           className="font-heading font-bold"
           style={{
             fontSize: 'var(--text-xl)',
-            color: 'rgba(255, 255, 255, 0.95)',
+            color: 'var(--current-text-bold)',
             lineHeight: 1.2,
             marginBottom: 'var(--space-2)',
           }}
@@ -421,7 +421,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
         <p
           style={{
             fontSize: 'var(--text-sm)',
-            color: 'rgba(255, 255, 255, 0.5)',
+            color: 'var(--text-muted)',
             fontWeight: 500,
           }}
         >
@@ -434,7 +434,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
         style={{
           fontSize: 'var(--text-sm)',
           lineHeight: 1.8,
-          color: 'rgba(255, 255, 255, 0.65)',
+          color: 'var(--current-text-light)',
           marginBottom: 'var(--space-6)',
         }}
       >
@@ -449,7 +449,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
             style={{
               fontSize: '0.6rem',
               fontWeight: 600,
-              color: 'rgba(255, 255, 255, 0.35)',
+              color: 'var(--text-muted)',
               letterSpacing: '0.08em',
             }}
           >
@@ -461,7 +461,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
                 key={i}
                 style={{
                   fontSize: '0.75rem',
-                  color: 'rgba(255, 255, 255, 0.45)',
+                  color: 'var(--text-muted)',
                   fontStyle: 'italic',
                   lineHeight: 1.5,
                 }}
@@ -485,7 +485,7 @@ function DetailPanel({ item, isLoading, onClose }: { item: ResearchItem | null; 
               style={{
                 fontSize: '0.8rem',
                 fontWeight: 500,
-                color: 'rgba(255, 255, 255, 0.5)',
+                color: 'var(--text-muted)',
               }}
             >
               <span>{linkIcons[link.type]}</span>
@@ -550,14 +550,7 @@ export default function ResearchContributions() {
     >
       {/* Cinematic background */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse 100% 70% at 50% -20%, rgba(6, 182, 212, 0.06) 0%, transparent 60%),
-            radial-gradient(ellipse 80% 50% at 100% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
-            linear-gradient(180deg, #09090b 0%, #0c0c10 50%, #09090b 100%)
-          `,
-        }}
+        className="absolute inset-0 pointer-events-none research-cinematic-bg"
       />
 
       {/* Noise texture */}
@@ -576,7 +569,7 @@ export default function ResearchContributions() {
           transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span
-            className="inline-block text-cyan-500 font-medium uppercase"
+            className="inline-block font-medium uppercase research-section-label"
             style={{
               fontSize: '0.6875rem',
               letterSpacing: '0.1em',
@@ -634,6 +627,27 @@ export default function ResearchContributions() {
 
       {/* CSS */}
       <style jsx global>{`
+        /* Section label - theme aware accent */
+        .research-section-label {
+          color: #0891b2;
+        }
+        .dark .research-section-label,
+        html[data-theme="dark"] .research-section-label {
+          color: #22d3ee;
+        }
+
+        /* Cinematic background - theme aware */
+        .research-cinematic-bg {
+          background: var(--background);
+        }
+        .dark .research-cinematic-bg,
+        html[data-theme="dark"] .research-cinematic-bg {
+          background:
+            radial-gradient(ellipse 100% 70% at 50% -20%, rgba(6, 182, 212, 0.06) 0%, transparent 60%),
+            radial-gradient(ellipse 80% 50% at 100% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+            var(--background);
+        }
+
         .research-layout {
           display: grid;
           grid-template-columns: 360px 1fr;
@@ -666,11 +680,11 @@ export default function ResearchContributions() {
           to { opacity: 1; transform: translateY(0); }
         }
         .research-list-item:hover {
-          background-color: rgba(255, 255, 255, 0.03);
+          background-color: var(--surface-subtle);
         }
         .research-list-item.is-selected {
-          background-color: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.1);
+          background-color: var(--surface-hover);
+          border-color: var(--border-subtle);
         }
         .research-detail-backdrop {
           display: none;
@@ -681,15 +695,15 @@ export default function ResearchContributions() {
         .research-detail-panel {
           padding: var(--space-6);
           border-radius: 12px;
-          background-color: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-subtle);
           min-height: 300px;
         }
         .research-link {
           transition: color 0.15s ease;
         }
         .research-link:hover {
-          color: #ffffff !important;
+          color: var(--current-text-bold) !important;
         }
         @media (max-width: 768px) {
           .research-detail-desktop {
@@ -699,9 +713,13 @@ export default function ResearchContributions() {
             display: block;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: var(--backdrop-color, rgba(0, 0, 0, 0.5));
             backdrop-filter: blur(4px);
             z-index: 100;
+          }
+          .dark .research-detail-backdrop,
+          html[data-theme="dark"] .research-detail-backdrop {
+            background: rgba(0, 0, 0, 0.7);
           }
           .research-detail-panel:not(.research-detail-empty) {
             position: fixed;
@@ -712,8 +730,8 @@ export default function ResearchContributions() {
             max-height: 80vh;
             overflow-y: auto;
             border-radius: 20px 20px 0 0;
-            background-color: #0c0c10;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--card);
+            border: 1px solid var(--card-border);
             padding: var(--space-6);
             padding-top: var(--space-8);
           }
@@ -727,13 +745,13 @@ export default function ResearchContributions() {
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
+            background: var(--surface-hover);
+            color: var(--text-muted);
             border: none;
             cursor: pointer;
           }
           .research-detail-close:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--surface-active);
           }
         }
       `}</style>

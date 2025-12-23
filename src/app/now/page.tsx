@@ -1,215 +1,240 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+"use client";
 
-export const metadata = {
-  title: 'Now | Sahar Barak',
-  description: 'What I\'m currently working on and focused on',
-};
+import { motion } from "framer-motion";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import { useNowBySection } from "@/hooks/useContent";
+
+function SectionSkeleton() {
+  return (
+    <div className="animate-pulse" style={{ marginBottom: "var(--space-16)" }}>
+      <div className="h-5 w-24 rounded mb-6" style={{ backgroundColor: "var(--card-border)" }} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i}>
+            <div className="h-4 w-32 rounded mb-2" style={{ backgroundColor: "var(--card-border)" }} />
+            <div className="h-4 w-full rounded" style={{ backgroundColor: "var(--card-border)" }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function NowPage() {
+  const nowBySection = useNowBySection();
+  const isLoading = nowBySection === undefined;
+
+  // Define section order
+  const sectionOrder = ["Building", "Reading", "Focus", "Learning", "Listening"];
+  const sections = nowBySection
+    ? sectionOrder.filter((s) => nowBySection[s]?.length > 0)
+    : [];
+
   return (
-    <div className="relative min-h-screen bg-[color:var(--background)]">
-      {/* Header */}
+    <div
+      className="relative min-h-screen"
+      style={{
+        backgroundColor: "var(--background)",
+        background: `
+          radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse 50% 30% at 0% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+          var(--background)
+        `,
+      }}
+    >
+      {/* Noise texture overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 0,
+          opacity: 0.03,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
       <div className="sticky top-0 z-50 px-4 pt-4 lg:px-8 bg-[color:var(--background)]/80 backdrop-blur-md">
         <Header />
       </div>
 
-      {/* Main Content */}
-      <main className="px-4 lg:px-8 py-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Page Title */}
-          <h1 className="font-heading font-bold text-[color:var(--text-strong)] mb-4" style={{ fontSize: 'clamp(1.75rem, 6vw, var(--text-4xl))' }}>
-            Now
-          </h1>
-
-          <p className="font-body text-[var(--text-sm)] text-[color:var(--text-muted)] mb-12">
-            Last updated: December 2024 &bull;{' '}
-            <a
-              href="https://aboutideasnow.com/about"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-[color:var(--text-strong)] transition-colors"
+      <main style={{ padding: "var(--space-16) var(--space-6)" }}>
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <motion.header
+            style={{ marginBottom: "var(--space-16)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1
+              className="font-heading font-black"
+              style={{
+                fontSize: "var(--text-4xl)",
+                letterSpacing: "var(--tracking-tighter)",
+                lineHeight: "var(--leading-tight)",
+                color: "var(--current-text-bold)",
+                marginBottom: "var(--space-4)",
+              }}
             >
-              What is a /now page?
-            </a>
-          </p>
-
-          {/* Products & Platforms */}
-          <section className="mb-12">
-            <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
-              Products & Platforms
-            </h2>
-
-            <div className="space-y-6">
+              Now
+            </h1>
+            <p
+              className="font-body"
+              style={{
+                fontSize: "var(--text-sm)",
+                color: "var(--text-muted)",
+              }}
+            >
+              Updated December 2024 ·{" "}
               <a
-                href="https://wessley.ai/"
+                href="https://nownownow.com/about"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
+                className="line"
               >
-                <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Wessley AI
-                </h3>
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  World&apos;s first AI-powered virtual garage allowing you to examine your car in 3D, plan work, repairs,
-                  upgrades, and order replacements with model-specific precision. Building a full pipeline from OEM
-                  schematics → graph → 3D wiring → AI &quot;virtual mechanic.&quot;
-                </p>
+                What is this?
               </a>
-
-              <a
-                href="https://karencli.dev/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
-              >
-                <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Karen AI
-                </h3>
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  AI layout regression testing and automatic fixings. Renders your app across viewports,
-                  detects layout and responsiveness issues, and generates concrete CSS/layout fixes.
-                </p>
-              </a>
-
-              <a
-                href="https://github.com/saharbarak/karen-cli"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
-              >
-                <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  Karen CLI
-                </h3>
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  Open-source command-line tooling for Karen AI. Lets developers run layout checks from the terminal,
-                  generate actionable tasks, and plug visual sanity checks into CI/CD.
-                </p>
-              </a>
-
-              <a
-                href="https://thepeaceboard.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow"
-              >
-                <h3 className="font-heading text-[var(--text-lg)] font-semibold text-[color:var(--text-strong)] mb-2">
-                  The Peace Board
-                </h3>
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                  A decentralized peace art demonstration. Maps peace pledges worldwide, visualizes percentages by country,
-                  exploring how civilian majorities can exert real leverage over policy.
-                </p>
-              </a>
-            </div>
-          </section>
-
-          {/* Currently Reading */}
-          <section className="mb-12">
-            <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
-              Currently Reading
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-xl">
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text-strong)] font-medium">
-                  &ldquo;Designing Data-Intensive Applications&rdquo;
-                </p>
-                <p className="font-body text-[var(--text-sm)] text-[color:var(--text-muted)]">
-                  Martin Kleppmann
-                </p>
-              </div>
-
-              <div className="p-4 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-xl">
-                <p className="font-body text-[var(--text-base)] text-[color:var(--text-strong)] font-medium">
-                  &ldquo;The Art of Doing Science and Engineering&rdquo;
-                </p>
-                <p className="font-body text-[var(--text-sm)] text-[color:var(--text-muted)]">
-                  Richard Hamming
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Currently Listening */}
-          <section className="mb-12">
-            <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
-              Currently Listening
-            </h2>
-
-            <div className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl">
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                A mix of electronic, ambient, and lo-fi music for focus.
-                Podcasts about technology, design, and entrepreneurship.
-              </p>
-            </div>
-          </section>
-
-          {/* Life Updates */}
-          <section className="mb-12">
-            <h2 className="font-heading text-[var(--text-2xl)] font-semibold text-[color:var(--text-strong)] mb-6">
-              Life Updates
-            </h2>
-
-            <div className="space-y-4">
-              <div className="flex gap-4 items-start">
-                <span className="text-2xl">📍</span>
-                <div>
-                  <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Based in Israel, building with Two Circle Studios and working on ventures.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 items-start">
-                <span className="text-2xl">🎯</span>
-                <div>
-                  <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Building an ecosystem of interoperable tools for better human coordination.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 items-start">
-                <span className="text-2xl">🌱</span>
-                <div>
-                  <p className="font-body text-[var(--text-base)] text-[color:var(--text)]">
-                    Exploring AI + physical infrastructure, decentralization + governance, and collaborative systems.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Connect */}
-          <section className="p-8 bg-[color:var(--muted)] rounded-2xl text-center">
-            <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-4">
-              Want to chat about any of this?
-            </h2>
-            <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-6">
-              Feel free to reach out if you&apos;re working on similar things or just want to connect.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="https://twitter.com/saharbarak"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-[color:var(--secondary)] text-[color:var(--secondary-foreground)] rounded-lg font-medium hover:bg-[color:var(--accent)] transition-colors"
-              >
-                Twitter
-              </a>
-              <a
-                href="mailto:sahar.h.barak@gmail.com"
-                className="px-6 py-3 bg-[color:var(--primary)] text-[color:var(--primary-foreground)] rounded-lg font-medium hover:scale-105 transition-transform"
-              >
-                Email Me
-              </a>
-            </div>
-          </section>
+          </motion.header>
+
+          {/* Sections */}
+          {isLoading ? (
+            <>
+              <SectionSkeleton />
+              <SectionSkeleton />
+              <SectionSkeleton />
+            </>
+          ) : sections.length > 0 ? (
+            sections.map((sectionName, sectionIndex) => {
+              const items = nowBySection![sectionName] || [];
+              return (
+                <motion.section
+                  key={sectionName}
+                  style={{ marginBottom: "var(--space-16)" }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: sectionIndex * 0.1 }}
+                >
+                  <h2
+                    className="font-heading font-bold"
+                    style={{
+                      fontSize: "var(--text-lg)",
+                      letterSpacing: "var(--tracking-tight)",
+                      color: "var(--current-text-bold)",
+                      marginBottom: "var(--space-6)",
+                    }}
+                  >
+                    {sectionName}
+                  </h2>
+
+                  <ul
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: sectionName === "Reading" ? "var(--space-3)" : "var(--space-6)",
+                    }}
+                  >
+                    {items.map((item) => (
+                      <li key={item._id}>
+                        {item.url ? (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="line font-body font-medium"
+                            style={{
+                              fontSize: "var(--text-base)",
+                              color: "var(--current-text-normal)",
+                            }}
+                          >
+                            {item.emoji && <span style={{ marginRight: "var(--space-2)" }}>{item.emoji}</span>}
+                            {item.title}
+                          </a>
+                        ) : (
+                          <span
+                            className="font-body font-medium"
+                            style={{
+                              fontSize: "var(--text-base)",
+                              color: "var(--current-text-normal)",
+                            }}
+                          >
+                            {item.emoji && <span style={{ marginRight: "var(--space-2)" }}>{item.emoji}</span>}
+                            {item.title}
+                          </span>
+                        )}
+                        {item.description && (
+                          <p
+                            className="font-body"
+                            style={{
+                              fontSize: "var(--text-base)",
+                              lineHeight: "var(--leading-relaxed)",
+                              color: "var(--current-text-light)",
+                              marginTop: "var(--space-1)",
+                            }}
+                          >
+                            {item.description}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.section>
+              );
+            })
+          ) : (
+            <p
+              className="font-body"
+              style={{
+                fontSize: "var(--text-base)",
+                color: "var(--current-text-light)",
+                textAlign: "center",
+                padding: "var(--space-12) 0",
+              }}
+            >
+              No items synced yet. Add Now content in Notion and run the sync.
+            </p>
+          )}
+
+          {/* CTA */}
+          <motion.div
+            style={{
+              paddingTop: "var(--space-12)",
+              borderTop: "1px solid var(--card-border)",
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <p
+              className="font-body"
+              style={{
+                fontSize: "var(--text-base)",
+                color: "var(--current-text-light)",
+                marginBottom: "var(--space-4)",
+              }}
+            >
+              Working on similar things?
+            </p>
+            <a
+              href="mailto:sahar.h.barak@gmail.com"
+              className="font-body line"
+              style={{
+                fontSize: "var(--text-base)",
+                color: "var(--current-text-normal)",
+              }}
+            >
+              Let&apos;s connect
+            </a>
+          </motion.div>
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

@@ -135,7 +135,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
       href={item.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block relative overflow-hidden"
+      className="block relative overflow-hidden opensource-card"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -145,9 +145,9 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
       style={{
         padding: 'var(--space-5)',
         borderRadius: '12px',
-        backgroundColor: isHovered ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.02)',
+        backgroundColor: isHovered ? 'var(--surface-hover)' : 'var(--surface-subtle)',
         border: '1px solid',
-        borderColor: isHovered ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.06)',
+        borderColor: isHovered ? 'var(--card-border)' : 'var(--border-subtle)',
         transition: 'all 0.25s ease',
       }}
     >
@@ -156,7 +156,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
         <div className="flex items-center gap-2">
           <span
             style={{
-              color: isGitHub ? 'rgba(255, 255, 255, 0.7)' : '#cb3837',
+              color: isGitHub ? 'var(--text-muted)' : '#cb3837',
             }}
           >
             {isGitHub ? <GitHubIcon /> : <NpmIcon />}
@@ -166,7 +166,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
             style={{
               fontSize: '0.6rem',
               fontWeight: 600,
-              color: isGitHub ? 'rgba(255, 255, 255, 0.4)' : '#cb3837',
+              color: isGitHub ? 'var(--text-muted)' : '#cb3837',
               letterSpacing: '0.08em',
             }}
           >
@@ -182,7 +182,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
-          style={{ color: 'rgba(255, 255, 255, 0.3)' }}
+          style={{ color: 'var(--text-muted)' }}
           animate={{ x: isHovered ? 2 : 0, y: isHovered ? -2 : 0 }}
           transition={{ duration: 0.2 }}
         >
@@ -195,7 +195,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
         className="font-mono font-semibold transition-colors duration-200"
         style={{
           fontSize: 'var(--text-base)',
-          color: isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.9)',
+          color: isHovered ? 'var(--current-text-bold)' : 'var(--current-text-normal)',
           marginBottom: 'var(--space-2)',
         }}
       >
@@ -208,7 +208,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
         style={{
           fontSize: '0.8rem',
           lineHeight: 1.5,
-          color: isHovered ? 'rgba(255, 255, 255, 0.65)' : 'rgba(255, 255, 255, 0.5)',
+          color: isHovered ? 'var(--current-text-light)' : 'var(--text-muted)',
           marginBottom: 'var(--space-4)',
           minHeight: '2.25rem',
         }}
@@ -229,7 +229,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
               <span
                 style={{
                   fontSize: '0.7rem',
-                  color: 'rgba(255, 255, 255, 0.5)',
+                  color: 'var(--text-muted)',
                 }}
               >
                 {(item as GitHubRepo).language}
@@ -237,13 +237,13 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
             </div>
 
             {/* Stars */}
-            <div className="flex items-center gap-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+            <div className="flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
               <StarIcon />
               <span style={{ fontSize: '0.7rem' }}>{(item as GitHubRepo).stars}</span>
             </div>
 
             {/* PRs */}
-            <div className="flex items-center gap-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+            <div className="flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
               <PRIcon />
               <span style={{ fontSize: '0.7rem' }}>{(item as GitHubRepo).prs} PRs</span>
             </div>
@@ -264,7 +264,7 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
             </span>
 
             {/* Downloads */}
-            <div className="flex items-center gap-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+            <div className="flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
               <DownloadIcon />
               <span style={{ fontSize: '0.7rem' }}>{(item as NpmPackage).downloads}</span>
             </div>
@@ -274,11 +274,9 @@ function ContributionCard({ item, index }: { item: Contribution; index: number }
 
       {/* Hover glow effect */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opensource-glow"
+        data-type={isGitHub ? 'github' : 'npm'}
         style={{
-          background: isGitHub
-            ? 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 60%)'
-            : 'radial-gradient(circle at 50% 0%, rgba(203, 56, 55, 0.08) 0%, transparent 60%)',
           borderRadius: '12px',
         }}
         animate={{ opacity: isHovered ? 1 : 0 }}

@@ -46,6 +46,10 @@ export function useNow() {
   return useQuery(api.now.list, {});
 }
 
+export function useNowBySection() {
+  return useQuery(api.now.bySection, {});
+}
+
 // Links
 export function useLinks() {
   return useQuery(api.links.list, {});
@@ -54,4 +58,9 @@ export function useLinks() {
 // Availability
 export function useAvailability() {
   return useQuery(api.availability.get, {});
+}
+
+// About
+export function useAbout() {
+  return useQuery(api.about.get, {});
 }
