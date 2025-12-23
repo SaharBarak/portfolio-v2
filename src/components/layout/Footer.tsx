@@ -5,100 +5,199 @@ import Link from 'next/link';
 import { LINKS } from '@/config/links';
 
 const Footer = () => {
-  return (
-    <footer className="footer relative w-full py-16 pb-8 bg-[color:var(--color-bg)] border-t border-[color:var(--card-border)]">
-      <div className="footer-container max-w-[1200px] mx-auto px-8">
-        {/* Top section - Branding and Navigation */}
-        <div className="footer-top grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-16 md:gap-8 pb-12 border-b border-[color:var(--card-border)]">
-          {/* Branding */}
-          <div className="footer-brand max-w-[320px] md:text-left text-center mx-auto md:mx-0">
-            <h2 className="footer-name font-heading text-2xl font-bold text-[color:var(--text-strong)] mb-3 tracking-tight">
-              Sahar Barak
-            </h2>
-            <p className="footer-tagline font-body text-sm leading-relaxed text-[color:var(--text-light)]">
-              Software Engineer building at the intersection of AI, clean energy, and developer tools
-            </p>
-          </div>
+  const currentYear = new Date().getFullYear();
 
-          {/* Navigation columns */}
-          <div className="footer-nav-columns grid grid-cols-3 gap-8 text-center md:text-left">
+  return (
+    <footer className="relative w-full">
+      {/* Footer Links */}
+      <div
+        style={{
+          borderTop: '1px solid var(--card-border)',
+          padding: 'var(--space-16) var(--space-6)',
+        }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div
+            className="grid grid-cols-2 sm:grid-cols-4"
+            style={{ gap: 'var(--space-10)', marginBottom: 'var(--space-16)' }}
+          >
             {/* Explore */}
-            <div className="footer-nav-column flex flex-col">
-              <h3 className="footer-nav-title text-xs font-semibold tracking-[0.1em] text-[color:var(--text-light)] mb-5 uppercase">
-                EXPLORE
+            <nav>
+              <h3
+                className="font-body font-semibold uppercase"
+                style={{
+                  fontSize: 'var(--text-xs)',
+                  letterSpacing: 'var(--tracking-widest)',
+                  color: 'var(--text-muted)',
+                  marginBottom: 'var(--space-5)',
+                }}
+              >
+                Explore
               </h3>
-              <nav className="footer-nav-links flex flex-col gap-3">
-                <Link href="/about" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  About
-                </Link>
-                <Link href="/ideas" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Ideas
-                </Link>
-                <Link href="/now" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Now
-                </Link>
-                <a href="#featured-work" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Projects
-                </a>
-              </nav>
-            </div>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {[
+                  { href: '/about', label: 'About' },
+                  { href: '/blog', label: 'Blog' },
+                  { href: '/ideas', label: 'Ideas' },
+                  { href: '/now', label: 'Now' },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="font-body line"
+                      style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--current-text-normal)',
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Work */}
+            <nav>
+              <h3
+                className="font-body font-semibold uppercase"
+                style={{
+                  fontSize: 'var(--text-xs)',
+                  letterSpacing: 'var(--tracking-widest)',
+                  color: 'var(--text-muted)',
+                  marginBottom: 'var(--space-5)',
+                }}
+              >
+                Work
+              </h3>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {[
+                  { href: '#featured-work', label: 'Projects' },
+                  { href: '#freelance-work', label: 'Freelance' },
+                  { href: LINKS.external.twoCircleStudios, label: 'Studio', external: true },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noopener noreferrer' : undefined}
+                      className="font-body line"
+                      style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--current-text-normal)',
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
             {/* Connect */}
-            <div className="footer-nav-column flex flex-col">
-              <h3 className="footer-nav-title text-xs font-semibold tracking-[0.1em] text-[color:var(--text-light)] mb-5 uppercase">
-                CONNECT
+            <nav>
+              <h3
+                className="font-body font-semibold uppercase"
+                style={{
+                  fontSize: 'var(--text-xs)',
+                  letterSpacing: 'var(--tracking-widest)',
+                  color: 'var(--text-muted)',
+                  marginBottom: 'var(--space-5)',
+                }}
+              >
+                Connect
               </h3>
-              <nav className="footer-nav-links flex flex-col gap-3">
-                <a href={LINKS.social.github} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  GitHub
-                </a>
-                <a href={LINKS.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  LinkedIn
-                </a>
-                <a href={LINKS.social.twitter} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Twitter
-                </a>
-                <a href={LINKS.social.discord} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Discord
-                </a>
-                <a href={LINKS.social.huggingface} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  HuggingFace
-                </a>
-              </nav>
-            </div>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {[
+                  { href: LINKS.social.github, label: 'GitHub' },
+                  { href: LINKS.social.linkedin, label: 'LinkedIn' },
+                  { href: LINKS.social.twitter, label: 'Twitter' },
+                  { href: LINKS.professional.whatsapp, label: 'WhatsApp' },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-body line"
+                      style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--current-text-normal)',
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-            {/* Support */}
-            <div className="footer-nav-column flex flex-col">
-              <h3 className="footer-nav-title text-xs font-semibold tracking-[0.1em] text-[color:var(--text-light)] mb-5 uppercase">
-                SUPPORT
+            {/* More */}
+            <nav>
+              <h3
+                className="font-body font-semibold uppercase"
+                style={{
+                  fontSize: 'var(--text-xs)',
+                  letterSpacing: 'var(--tracking-widest)',
+                  color: 'var(--text-muted)',
+                  marginBottom: 'var(--space-5)',
+                }}
+              >
+                More
               </h3>
-              <nav className="footer-nav-links flex flex-col gap-3">
-                <a href={LINKS.support.patreon} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Patreon
-                </a>
-                <a href={LINKS.professional.calendly.thirtyMin} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  Book a Call
-                </a>
-                <a href="https://beactive.co.il/project/86508" target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--text)] hover:text-[color:var(--text-strong)] transition-all duration-200 hover:translate-x-1">
-                  BeActive
-                </a>
-              </nav>
-            </div>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                {[
+                  { href: LINKS.social.huggingface, label: 'HuggingFace' },
+                  { href: LINKS.social.substack, label: 'Substack' },
+                  { href: LINKS.support.patreon, label: 'Patreon' },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-body line"
+                      style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--current-text-normal)',
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-        </div>
 
-        {/* Bottom section - Copyright and Legal */}
-        <div className="footer-bottom flex flex-col md:flex-row justify-between items-center pt-8 gap-4 text-center">
-          <p className="footer-copyright text-sm text-[color:var(--text-light)]">
-            &copy; {new Date().getFullYear()} Sahar Barak. All rights reserved.
-          </p>
-          <div className="footer-legal flex gap-6">
-            <a href="/privacy" className="text-sm text-[color:var(--text-light)] hover:text-[color:var(--text-strong)] transition-colors duration-200">
-              Privacy
-            </a>
-            <a href="/terms" className="text-sm text-[color:var(--text-light)] hover:text-[color:var(--text-strong)] transition-colors duration-200">
-              Terms
-            </a>
+          {/* Bottom */}
+          <div
+            className="tsp"
+            style={{
+              borderTop: '1px solid var(--card-border)',
+              padding: 'var(--space-8) 0 0 0',
+            }}
+          >
+            <p
+              className="font-body"
+              style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--text-muted)',
+              }}
+            >
+              &copy; {currentYear} Sahar Barak
+            </p>
+            <p
+              className="font-body flex items-center"
+              style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--text-muted)',
+                gap: 'var(--space-6)',
+              }}
+            >
+              <Link href="/privacy" className="line">Privacy</Link>
+              <Link href="/terms" className="line">Terms</Link>
+            </p>
           </div>
         </div>
       </div>

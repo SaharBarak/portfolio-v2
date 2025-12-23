@@ -1,176 +1,225 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+"use client";
 
-export const metadata = {
-  title: 'Ideas | Sahar Barak',
-  description: 'Thoughts, concepts, and projects I\'m exploring',
-};
+import { motion } from "framer-motion";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import { useIdeas } from "@/hooks/useContent";
+
+function IdeaSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="flex items-baseline" style={{ gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>
+        <div className="h-6 w-32 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+        <div className="h-4 w-16 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+      </div>
+      <div className="h-4 w-full rounded mb-2" style={{ backgroundColor: "var(--card-border)" }} />
+      <div className="h-4 w-3/4 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+    </div>
+  );
+}
 
 export default function IdeasPage() {
+  const convexIdeas = useIdeas();
+  const isLoading = convexIdeas === undefined;
+
+  const ideas = convexIdeas || [];
+
   return (
-    <div className="relative min-h-screen bg-[color:var(--background)]">
-      {/* Header */}
+    <div
+      className="relative min-h-screen"
+      style={{
+        backgroundColor: "var(--background)",
+        background: `
+          radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse 50% 30% at 0% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+          var(--background)
+        `,
+      }}
+    >
+      {/* Noise texture overlay */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 0,
+          opacity: 0.03,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
       <div className="sticky top-0 z-50 px-4 pt-4 lg:px-8 bg-[color:var(--background)]/80 backdrop-blur-md">
         <Header />
       </div>
 
-      {/* Main Content */}
-      <main className="px-4 lg:px-8 py-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Page Title */}
-          <h1 className="font-heading font-bold text-[color:var(--text-strong)] mb-4" style={{ fontSize: 'clamp(1.75rem, 6vw, var(--text-4xl))' }}>
-            Ideas
-          </h1>
+      <main style={{ padding: "var(--space-16) var(--space-6)" }}>
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <motion.header
+            style={{ marginBottom: "var(--space-16)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1
+              className="font-heading font-black"
+              style={{
+                fontSize: "var(--text-4xl)",
+                letterSpacing: "var(--tracking-tighter)",
+                lineHeight: "var(--leading-tight)",
+                color: "var(--current-text-bold)",
+                marginBottom: "var(--space-4)",
+              }}
+            >
+              Ideas
+            </h1>
+            <p
+              className="font-body"
+              style={{
+                fontSize: "var(--text-lg)",
+                lineHeight: "var(--leading-relaxed)",
+                color: "var(--current-text-light)",
+              }}
+            >
+              Concepts in exploration mode.
+            </p>
+          </motion.header>
 
-          <p className="font-body text-[var(--text-lg)] text-[color:var(--text)] mb-12">
-            Concepts, prototypes, and directions that are in exploration mode.
-          </p>
-
-          {/* Ideas Grid */}
-          <div className="space-y-8">
-            {/* Taro */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-[var(--radius-full)]">
-                  Prototype
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Taro
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                A real-time visual graph of chords and harmonies, turning music theory into an evolving network
-                of tensions and resolutions. Play a chord and watch a graph of harmonies and progressions unfold—
-                making learning music theory interactive and informative.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Music
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Visualization
-                </span>
-              </div>
-            </article>
-
-            {/* Brief Me */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-[var(--radius-full)]">
-                  Concept
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Brief Me
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                A personal &quot;sense-making&quot; layer that summarizes your data-flooded digital life into timelines,
-                decisions, and action items. An AI that sits on your data—WhatsApp groups, emails, messages—and
-                filters the influx into actionables and calendar events.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  AI
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Productivity
-                </span>
-              </div>
-            </article>
-
-            {/* SYNC */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-[var(--radius-full)]">
-                  Active
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                SYNC
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                A Web6-flavored identity layer built from SDS/SEL-DIDs and a user-owned data graph,
-                purposed to fulfill SYNC&apos;s vision of a fully decentralized civilian-powered governance system.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Decentralization
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Identity
-                </span>
-              </div>
-            </article>
-
-            {/* Been There */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 rounded-[var(--radius-full)]">
-                  Exploring
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Been There
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                Decentralized human-centered rental reputation: experiences, gossip verification, value-for-money ratings,
-                street and neighbor scores—not just listing photos. Includes a Gossip Verification Risk Engine for
-                risk scoring from crowdsourced claims.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Real Estate
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Reputation
-                </span>
-              </div>
-            </article>
-
-            {/* Cherry */}
-            <article className="p-6 bg-[color:var(--card)] border border-[color:var(--card-border)] rounded-2xl hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 rounded-[var(--radius-full)]">
-                  Vision
-                </span>
-              </div>
-              <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-3">
-                Cherry
-              </h2>
-              <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-4">
-                A network for transforming grey urban surfaces into rooftop agriculture and regenerative infrastructure:
-                rooftop farming, localized food and energy, and city-scale collaboration.
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Urban Agriculture
-                </span>
-                <span className="px-3 py-1 text-[var(--text-xs)] bg-[color:var(--accent)] text-[color:var(--accent-foreground)] rounded-[var(--radius-full)]">
-                  Sustainability
-                </span>
-              </div>
-            </article>
-          </div>
+          {/* Ideas List */}
+          <ul style={{ display: "flex", flexDirection: "column", gap: "var(--space-12)" }}>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <li key={i}>
+                  <IdeaSkeleton />
+                </li>
+              ))
+            ) : ideas.length > 0 ? (
+              ideas.map((idea, index) => (
+                <motion.li
+                  key={idea._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                >
+                  <article>
+                    <div
+                      className="flex items-baseline"
+                      style={{ gap: "var(--space-3)", marginBottom: "var(--space-2)" }}
+                    >
+                      <h2
+                        className="font-heading font-bold"
+                        style={{
+                          fontSize: "var(--text-xl)",
+                          color: "var(--current-text-bold)",
+                        }}
+                      >
+                        {idea.title}
+                      </h2>
+                      <span
+                        className="font-body"
+                        style={{
+                          fontSize: "var(--text-sm)",
+                          color: "var(--text-muted)",
+                        }}
+                      >
+                        {idea.status}
+                      </span>
+                    </div>
+                    <p
+                      className="font-body"
+                      style={{
+                        fontSize: "var(--text-base)",
+                        lineHeight: "var(--leading-relaxed)",
+                        color: "var(--current-text-normal)",
+                      }}
+                    >
+                      {idea.description}
+                    </p>
+                    {idea.tags && idea.tags.length > 0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "var(--space-2)",
+                          marginTop: "var(--space-3)",
+                        }}
+                      >
+                        {idea.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="font-body"
+                            style={{
+                              padding: "var(--space-1) var(--space-2)",
+                              fontSize: "var(--text-xs)",
+                              backgroundColor: "rgba(255, 255, 255, 0.05)",
+                              color: "var(--current-text-light)",
+                              borderRadius: "var(--radius-md)",
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </article>
+                </motion.li>
+              ))
+            ) : (
+              <li>
+                <p
+                  className="font-body"
+                  style={{
+                    fontSize: "var(--text-base)",
+                    color: "var(--current-text-light)",
+                    textAlign: "center",
+                    padding: "var(--space-12) 0",
+                  }}
+                >
+                  No ideas synced yet. Add ideas in Notion and run the sync.
+                </p>
+              </li>
+            )}
+          </ul>
 
           {/* CTA */}
-          <div className="mt-16 p-8 bg-[color:var(--muted)] rounded-2xl text-center">
-            <h2 className="font-heading text-[var(--text-xl)] font-semibold text-[color:var(--text-strong)] mb-4">
+          <motion.div
+            style={{
+              marginTop: "var(--space-20)",
+              paddingTop: "var(--space-12)",
+              borderTop: "1px solid var(--card-border)",
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <p
+              className="font-body"
+              style={{
+                fontSize: "var(--text-base)",
+                color: "var(--current-text-light)",
+                marginBottom: "var(--space-4)",
+              }}
+            >
               Have an idea to discuss?
-            </h2>
-            <p className="font-body text-[var(--text-base)] text-[color:var(--text)] mb-6">
-              I&apos;m always excited to explore new concepts and collaborate on interesting projects.
             </p>
             <a
               href="mailto:sahar.h.barak@gmail.com"
-              className="inline-block px-6 py-3 bg-[color:var(--primary)] text-[color:var(--primary-foreground)] rounded-lg font-medium hover:scale-105 transition-transform"
+              className="font-body line"
+              style={{
+                fontSize: "var(--text-base)",
+                color: "var(--current-text-normal)",
+              }}
             >
-              Get in Touch
+              Get in touch
             </a>
-          </div>
+          </motion.div>
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

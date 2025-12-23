@@ -1,0 +1,17 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://saharbarak.dev/sitemap.xml
+
+# Block common irrelevant paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow search engines to crawl all main content
+Allow: /blog/
+Allow: /about
+Allow: /ideas
+Allow: /now

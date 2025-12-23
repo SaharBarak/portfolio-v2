@@ -80,7 +80,8 @@ export default function HeaderGlass({
           inset: 0,
           borderBottomLeftRadius: 'var(--radius-xl)',
           borderBottomRightRadius: 'var(--radius-xl)',
-          willChange: 'backdrop-filter, opacity',
+          // Note: willChange removed - backdrop-filter already GPU accelerated
+          // and willChange creates extra compositing overhead
         }}
       />
 

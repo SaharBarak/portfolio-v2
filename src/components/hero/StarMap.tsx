@@ -110,11 +110,25 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
   const [isInHeroSection, setIsInHeroSection] = useState(true);
 
   // Detect when within hero section (not scrolled past it)
+  // Using RAF throttle to prevent scroll jank
   useEffect(() => {
+    let ticking = false;
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      // Hero section is roughly viewport height
-      const heroHeight = window.innerHeight * 0.9;
-      setIsInHeroSection(window.scrollY < heroHeight);
+      lastScrollY = window.scrollY;
+
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          // Hero section is roughly viewport height
+          const heroHeight = window.innerHeight * 0.9;
+          const inHero = lastScrollY < heroHeight;
+          // Only update state if changed to avoid re-renders
+          setIsInHeroSection(prev => prev !== inHero ? inHero : prev);
+          ticking = false;
+        });
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -326,17 +340,16 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
         );
       })}
 
-      {/* Tooltip - compact */}
+      {/* Tooltip - compact (no backdrop-filter for performance) */}
       {hoveredStar && (
         <div
           className="fixed z-50 px-1.5 py-1 rounded pointer-events-none"
           style={{
             left: mousePos.x + 10,
             top: mousePos.y - 8,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
             border: '1px solid rgba(255, 255, 255, 0.15)',
             color: 'white',
-            backdropFilter: 'blur(4px)',
             fontSize: '0.65rem',
             lineHeight: 1.3,
           }}
@@ -499,9 +512,8 @@ export default function StarMap({ isDark, date, onConstellationHighlight }: Star
             <div
               className="px-4 py-2 rounded-lg flex items-center gap-2"
               style={{
-                backgroundColor: 'rgba(10, 15, 35, 0.85)',
+                backgroundColor: 'rgba(10, 15, 35, 0.95)',
                 border: '1px solid rgba(139, 92, 246, 0.3)',
-                backdropFilter: 'blur(8px)',
               }}
             >
               <span className="text-purple-400">✦</span>
