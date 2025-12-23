@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useFreelance } from "@/hooks/useContent";
 
 interface FreelanceProject {
@@ -22,123 +21,91 @@ interface FreelanceProject {
 
 function FreelanceCard({ project, index }: { project: FreelanceProject; index: number }) {
   return (
-    <motion.a
-      href={project.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block overflow-hidden"
+    <motion.div
+      className="group relative flex-shrink-0 overflow-hidden"
       style={{
-        backgroundColor: project.colors.bg,
+        width: "390px",
+        height: "312px",
+        backgroundColor: "#fff",
         borderRadius: "16px",
       }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: 30 }}
+      whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
     >
-      <div className="p-6 flex flex-col h-full min-h-[280px]">
-        {/* Logo */}
-        {project.logo && (
-          <div className="mb-4 h-10 flex items-center">
-            <Image
-              src={project.logo}
-              alt={`${project.client} logo`}
-              width={120}
-              height={40}
-              className="h-8 w-auto object-contain object-left"
-            />
-          </div>
-        )}
+      {/* Iframe - shows immediately */}
+      <iframe
+        src={project.url}
+        title={`${project.title} preview`}
+        className="w-full h-full border-0"
+        style={{
+          transform: "scale(0.5)",
+          transformOrigin: "top left",
+          width: "200%",
+          height: "200%",
+        }}
+        sandbox="allow-scripts allow-same-origin"
+      />
 
-        {/* Client tag */}
-        <p
-          className="uppercase font-medium mb-2"
+      {/* Bottom gradient with button */}
+      <div
+        className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-4 pointer-events-none"
+        style={{
+          height: "80px",
+          background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        }}
+      >
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-4 py-2 rounded-full text-white font-medium pointer-events-auto"
           style={{
-            fontSize: "0.625rem",
-            letterSpacing: "0.1em",
-            color: project.colors.accent,
-          }}
-        >
-          {project.client}
-        </p>
-
-        {/* Title */}
-        <h3
-          className="font-semibold mb-3"
-          style={{
-            fontSize: "1.25rem",
-            lineHeight: 1.3,
-            color: project.colors.text,
-          }}
-        >
-          {project.title}
-        </h3>
-
-        {/* Description */}
-        <p
-          className="flex-1 mb-4"
-          style={{
-            fontSize: "0.875rem",
-            lineHeight: 1.6,
-            color: project.colors.textMuted || `${project.colors.text}80`,
-          }}
-        >
-          {project.description}
-        </p>
-
-        {/* Tags */}
-        {project.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags.map((tag, i) => (
-              <span
-                key={i}
-                className="px-2 py-1 rounded-full"
-                style={{
-                  fontSize: "0.625rem",
-                  fontWeight: 500,
-                  backgroundColor: `${project.colors.accent}20`,
-                  color: project.colors.accent,
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Testimonial quote (if available) */}
-        {project.testimonial && (
-          <blockquote
-            className="border-l-2 pl-3 italic"
-            style={{
-              fontSize: "0.8125rem",
-              color: project.colors.textMuted || `${project.colors.text}60`,
-              borderColor: project.colors.accent,
-            }}
-          >
-            &ldquo;{project.testimonial}&rdquo;
-          </blockquote>
-        )}
-
-        {/* Arrow indicator */}
-        <div
-          className="flex items-center gap-2 mt-4 group-hover:gap-3 transition-all"
-          style={{
-            color: project.colors.accent,
             fontSize: "0.8125rem",
-            fontWeight: 500,
+            backgroundColor: project.colors.accent,
+            color: project.colors.bg === "#FAF7F2" ? "#1a1a1a" : "#ffffff",
           }}
         >
-          <span>View project</span>
-          <span>→</span>
-        </div>
+          Open {project.title} →
+        </a>
       </div>
-    </motion.a>
+    </motion.div>
+  );
+}
+
+function SkeletonCard() {
+  return (
+    <div
+      className="flex-shrink-0 overflow-hidden animate-pulse"
+      style={{
+        width: "390px",
+        height: "312px",
+        backgroundColor: "var(--card)",
+        borderRadius: "16px",
+      }}
+    >
+      <div className="p-6 flex flex-col h-full">
+        <div className="mb-5 h-10 w-24 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+        <div className="h-3 w-16 rounded mb-2" style={{ backgroundColor: "var(--card-border)" }} />
+        <div className="h-7 w-3/4 rounded mb-3" style={{ backgroundColor: "var(--card-border)" }} />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 w-full rounded" style={{ backgroundColor: "var(--card-border)" }} />
+          <div className="h-4 w-5/6 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+        </div>
+        <div className="flex gap-2 mb-3">
+          <div className="h-6 w-14 rounded-full" style={{ backgroundColor: "var(--card-border)" }} />
+          <div className="h-6 w-16 rounded-full" style={{ backgroundColor: "var(--card-border)" }} />
+        </div>
+        <div className="h-4 w-24 rounded" style={{ backgroundColor: "var(--card-border)" }} />
+      </div>
+    </div>
   );
 }
 
 export default function FreelanceShowcase() {
   const convexFreelance = useFreelance();
+  const isLoading = convexFreelance === undefined;
 
   // Map Convex data to component format
   const projects: FreelanceProject[] = convexFreelance
@@ -159,8 +126,8 @@ export default function FreelanceShowcase() {
       }))
     : [];
 
-  // Don't render if no freelance projects
-  if (projects.length === 0) return null;
+  // Don't render if loaded but no freelance projects
+  if (!isLoading && projects.length === 0) return null;
 
   return (
     <section
@@ -170,7 +137,7 @@ export default function FreelanceShowcase() {
       aria-labelledby="freelance-title"
     >
       {/* Section Header */}
-      <header style={{ marginBottom: "var(--space-12)", padding: "0 var(--space-8)" }}>
+      <header style={{ marginBottom: "var(--space-16)", padding: "0 var(--space-8)" }}>
         <div className="max-w-5xl mx-auto">
           <motion.p
             className="font-medium uppercase"
@@ -192,7 +159,7 @@ export default function FreelanceShowcase() {
             id="freelance-title"
             className="font-heading font-black tracking-tight"
             style={{
-              fontSize: "clamp(2rem, 8vw, var(--text-5xl))",
+              fontSize: "clamp(2rem, 8vw, var(--text-6xl))",
               lineHeight: "var(--leading-none)",
               color: "var(--current-text-bold)",
               marginBottom: "var(--space-4)",
@@ -211,6 +178,7 @@ export default function FreelanceShowcase() {
               fontSize: "var(--text-base)",
               lineHeight: "var(--leading-relaxed)",
               color: "var(--current-text-light)",
+              marginTop: "var(--space-4)",
             }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -222,12 +190,21 @@ export default function FreelanceShowcase() {
         </div>
       </header>
 
-      {/* Grid */}
-      <div className="max-w-5xl mx-auto px-[var(--space-8)]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
-            <FreelanceCard key={project.title} project={project} index={index} />
-          ))}
+      {/* Horizontal Scrollable Container */}
+      <div
+        className="overflow-x-auto scrollbar-hide"
+        style={{
+          paddingLeft: "var(--space-8)",
+          paddingRight: "var(--space-8)",
+          paddingBottom: "var(--space-2)",
+        }}
+      >
+        <div className="flex gap-5" style={{ width: "max-content" }}>
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
+            : projects.map((project, index) => (
+                <FreelanceCard key={project.title} project={project} index={index} />
+              ))}
         </div>
       </div>
     </section>

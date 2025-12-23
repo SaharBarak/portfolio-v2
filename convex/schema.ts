@@ -108,10 +108,81 @@ export default defineSchema({
     coverImage: v.optional(v.string()),
     published: v.boolean(),
     syncedAt: v.number(),
+    // Engagement stats
+    views: v.optional(v.number()),
   })
     .index("by_slug", ["slug"])
     .index("by_date", ["date"])
     .index("by_notion_id", ["notionId"])
+    .index("by_published", ["published"]),
+
+  // Blog Reactions (anonymous emoji reactions)
+  blogReactions: defineTable({
+    slug: v.string(),
+    fire: v.number(),
+    heart: v.number(),
+    rocket: v.number(),
+    mindBlown: v.number(),
+    lightbulb: v.number(),
+  }).index("by_slug", ["slug"]),
+
+  // Newsletter Subscribers
+  subscribers: defineTable({
+    email: v.string(),
+    subscribedAt: v.number(),
+    source: v.optional(v.string()),
+  }).index("by_email", ["email"]),
+
+  // Blog Comments
+  blogComments: defineTable({
+    slug: v.string(),
+    userId: v.string(),
+    userName: v.string(),
+    userImage: v.optional(v.string()),
+    content: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+    parentId: v.optional(v.id("blogComments")),
+    likes: v.optional(v.number()),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_user", ["userId"])
+    .index("by_parent", ["parentId"]),
+
+  // Blog Likes (user-attributed)
+  blogLikes: defineTable({
+    slug: v.string(),
+    userId: v.string(),
+    userName: v.string(),
+    userImage: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_user", ["userId"])
+    .index("by_slug_user", ["slug", "userId"]),
+
+  // Blog Claps (Medium-style, anonymous with visitor ID)
+  blogClaps: defineTable({
+    slug: v.string(),
+    visitorId: v.string(),
+    count: v.number(), // 1-50 claps per visitor
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_visitor", ["visitorId"])
+    .index("by_slug_visitor", ["slug", "visitorId"]),
+
+  // Blog Series (group related articles)
+  blogSeries: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    description: v.string(),
+    coverImage: v.optional(v.string()),
+    published: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
     .index("by_published", ["published"]),
 
   // Ideas
@@ -171,4 +242,41 @@ export default defineSchema({
     calendlyUrl: v.string(),
     updatedAt: v.number(),
   }),
+
+  // About page content
+  about: defineTable({
+    notionId: v.string(),
+    heroImages: v.array(v.string()),
+    headline: v.string(),
+    tagline: v.string(),
+    bio: v.string(),
+    bioSecondary: v.optional(v.string()),
+    ventures: v.array(
+      v.object({
+        name: v.string(),
+        description: v.string(),
+        url: v.string(),
+      })
+    ),
+    freelance: v.object({
+      name: v.string(),
+      description: v.string(),
+      url: v.string(),
+    }),
+    research: v.string(),
+    stack: v.array(
+      v.object({
+        label: v.string(),
+        items: v.array(v.string()),
+      })
+    ),
+    hobbies: v.string(),
+    socialLinks: v.object({
+      email: v.string(),
+      github: v.optional(v.string()),
+      linkedin: v.optional(v.string()),
+      twitter: v.optional(v.string()),
+    }),
+    syncedAt: v.number(),
+  }).index("by_notion_id", ["notionId"]),
 });

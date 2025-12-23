@@ -170,10 +170,11 @@ const databases: DatabaseConfig[] = [
       Section: {
         select: {
           options: [
-            { name: "Products", color: "blue" },
+            { name: "Building", color: "blue" },
             { name: "Reading", color: "yellow" },
-            { name: "Listening", color: "purple" },
-            { name: "Life", color: "green" },
+            { name: "Focus", color: "green" },
+            { name: "Learning", color: "purple" },
+            { name: "Listening", color: "pink" },
           ],
         },
       },
@@ -182,6 +183,24 @@ const databases: DatabaseConfig[] = [
       URL: { url: {} },
       Order: { number: {} },
       Published: { checkbox: {} },
+    },
+  },
+  {
+    name: "About",
+    envKey: "NOTION_ABOUT_DB",
+    icon: "👤",
+    properties: {
+      Name: { title: {} },
+      Tagline: { rich_text: {} },
+      Bio: { rich_text: {} },
+      BioSecondary: { rich_text: {} },
+      HeroImages: { rich_text: {} },
+      Ventures: { rich_text: {} },
+      Freelance: { rich_text: {} },
+      Research: { rich_text: {} },
+      Stack: { rich_text: {} },
+      Hobbies: { rich_text: {} },
+      SocialLinks: { rich_text: {} },
     },
   },
   {

@@ -13,9 +13,24 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const moonRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  // Check if splash was already shown this session
   useEffect(() => {
+    const alreadyShown = sessionStorage.getItem('splash-shown');
+    if (alreadyShown) {
+      setIsVisible(false);
+      onComplete?.();
+    } else {
+      sessionStorage.setItem('splash-shown', 'true');
+      setShouldAnimate(true);
+    }
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+
     const sun = sunRef.current;
     const moon = moonRef.current;
     const text = textRef.current;
@@ -108,7 +123,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     return () => {
       tl.kill();
     };
-  }, [onComplete]);
+  }, [shouldAnimate, onComplete]);
 
   if (!isVisible) return null;
 
@@ -116,7 +131,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     <div
       ref={containerRef}
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#000000' }}
+      style={{ backgroundColor: '#0c0c0e' }}
     >
       {/* Background glow */}
       <div

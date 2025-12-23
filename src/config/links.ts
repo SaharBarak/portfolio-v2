@@ -49,6 +49,7 @@ export const LINKS = {
       general: "https://calendly.com/saharbarak",
       thirtyMin: "https://calendly.com/sahar-h-barak/30min"
     },
+    whatsapp: "https://wa.me/972586526726",
     email: "mailto:sahar.h.barak@gmail.com",
     portfolio: "https://saharbarak.dev",
     resume: "https://your-resume-link.com"

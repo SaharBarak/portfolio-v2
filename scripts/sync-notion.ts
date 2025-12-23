@@ -131,6 +131,38 @@ async function syncToConvex(
   }
 }
 
+async function syncFreelance() {
+  const dbId = process.env.NOTION_FREELANCE_DB;
+  if (!dbId) return;
+
+  console.log("📦 Syncing Freelance...");
+  const pages = await fetchNotionDatabase(dbId);
+
+  for (const page of pages) {
+    const p = page.properties;
+    const data = {
+      notionId: page.id,
+      title: getTitle(p.Name),
+      client: getText(p.Client) || undefined,
+      description: getText(p.Description),
+      url: getUrl(p.URL),
+      logo: getText(p.Logo) || undefined,
+      colors: {
+        bg: getText(p.BgColor),
+        accent: getText(p.AccentColor),
+        text: getText(p.TextColor),
+      },
+      testimonial: getText(p.Testimonial) || undefined,
+      tags: getMultiSelect(p.Tags),
+      order: getNumber(p.Order),
+      published: getCheckbox(p.Published),
+    };
+
+    const success = await syncToConvex("freelance:upsert", data);
+    console.log(`   ${success ? "✅" : "❌"} ${data.title}`);
+  }
+}
+
 async function syncProjects() {
   const dbId = process.env.NOTION_PROJECTS_DB;
   if (!dbId) return;
@@ -331,13 +363,146 @@ async function syncBlog() {
   }
 }
 
+async function syncIdeas() {
+  const dbId = process.env.NOTION_IDEAS_DB;
+  if (!dbId) {
+    console.log("⏭️  Skipping Ideas (no NOTION_IDEAS_DB)");
+    return;
+  }
+
+  console.log("📦 Syncing Ideas...");
+  const pages = await fetchNotionDatabase(dbId);
+
+  for (const page of pages) {
+    const p = page.properties;
+    const data = {
+      notionId: page.id,
+      title: getTitle(p.Name),
+      status: getSelect(p.Status) || "Concept",
+      tags: getMultiSelect(p.Tags),
+      description: getText(p.Description),
+      order: getNumber(p.Order),
+      published: getCheckbox(p.Published),
+    };
+
+    const success = await syncToConvex("ideas:upsert", data);
+    console.log(`   ${success ? "✅" : "❌"} ${data.title}`);
+  }
+}
+
+async function syncNow() {
+  const dbId = process.env.NOTION_NOW_DB;
+  if (!dbId) {
+    console.log("⏭️  Skipping Now (no NOTION_NOW_DB)");
+    return;
+  }
+
+  console.log("📦 Syncing Now...");
+  const pages = await fetchNotionDatabase(dbId);
+
+  for (const page of pages) {
+    const p = page.properties;
+    const data = {
+      notionId: page.id,
+      section: getSelect(p.Section) || "Building",
+      title: getTitle(p.Name),
+      description: getText(p.Description) || undefined,
+      emoji: getText(p.Emoji) || undefined,
+      url: getUrl(p.URL) || undefined,
+      order: getNumber(p.Order),
+      published: getCheckbox(p.Published),
+    };
+
+    const success = await syncToConvex("now:upsert", data);
+    console.log(`   ${success ? "✅" : "❌"} ${data.title}`);
+  }
+}
+
+async function syncAbout() {
+  const dbId = process.env.NOTION_ABOUT_DB;
+  if (!dbId) {
+    console.log("⏭️  Skipping About (no NOTION_ABOUT_DB)");
+    return;
+  }
+
+  console.log("📦 Syncing About...");
+  const pages = await fetchNotionDatabase(dbId);
+
+  if (pages.length === 0) {
+    console.log("   ⚠️  No About page found in Notion");
+    return;
+  }
+
+  const page = pages[0];
+  const p = page.properties;
+
+  // Parse JSON fields
+  let heroImages: string[] = [];
+  let ventures: { name: string; description: string; url: string }[] = [];
+  let freelance = { name: "", description: "", url: "" };
+  let stack: { label: string; items: string[] }[] = [];
+  let socialLinks = { email: "", github: "", linkedin: "", twitter: "" };
+
+  try {
+    heroImages = JSON.parse(getText(p.HeroImages) || "[]");
+  } catch {
+    heroImages = ["/hero/1.jpg", "/hero/2.jpg", "/hero/3.jpg", "/hero/4.jpg", "/hero/5.jpg", "/hero/6.jpg"];
+  }
+
+  try {
+    ventures = JSON.parse(getText(p.Ventures) || "[]");
+  } catch {
+    ventures = [];
+  }
+
+  try {
+    freelance = JSON.parse(getText(p.Freelance) || "{}");
+  } catch {
+    freelance = { name: "", description: "", url: "" };
+  }
+
+  try {
+    stack = JSON.parse(getText(p.Stack) || "[]");
+  } catch {
+    stack = [];
+  }
+
+  try {
+    socialLinks = JSON.parse(getText(p.SocialLinks) || "{}");
+  } catch {
+    socialLinks = { email: "", github: "", linkedin: "", twitter: "" };
+  }
+
+  const data = {
+    notionId: page.id,
+    heroImages,
+    headline: getTitle(p.Name) || "Hey, I'm Sahar",
+    tagline: getText(p.Tagline) || "Developer building things — freelancing and working on my own ventures.",
+    bio: getText(p.Bio) || "",
+    bioSecondary: getText(p.BioSecondary) || undefined,
+    ventures,
+    freelance,
+    research: getText(p.Research) || "",
+    stack,
+    hobbies: getText(p.Hobbies) || "",
+    socialLinks,
+  };
+
+  const success = await syncToConvex("about:upsert", data);
+  console.log(`   ${success ? "✅" : "❌"} About page`);
+}
+
 async function main() {
   console.log("\n🔄 Syncing Notion → Convex...\n");
 
   await syncProjects();
+  await syncFreelance();
   await syncResearch();
   await syncContributions();
   await syncBlog();
+  await syncIdeas();
+  await syncNow();
+  await syncAbout();
   await syncAvailability();
 
   console.log("\n✅ Sync complete!\n");
