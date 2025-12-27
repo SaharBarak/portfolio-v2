@@ -26,7 +26,7 @@ function FreelanceCard({ project, index }: { project: FreelanceProject; index: n
       style={{
         width: "390px",
         height: "312px",
-        backgroundColor: "#fff",
+        backgroundColor: "var(--card)",
         borderRadius: "16px",
       }}
       initial={{ opacity: 0, x: 30 }}
@@ -53,18 +53,18 @@ function FreelanceCard({ project, index }: { project: FreelanceProject; index: n
         className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-4 pointer-events-none"
         style={{
           height: "80px",
-          background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+          background: "linear-gradient(to top, var(--surface-active) 0%, transparent 100%)",
         }}
       >
         <a
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-4 py-2 rounded-full text-white font-medium pointer-events-auto"
+          className="px-4 py-2 rounded-full font-medium pointer-events-auto"
           style={{
             fontSize: "0.8125rem",
-            backgroundColor: project.colors.accent,
-            color: project.colors.bg === "#FAF7F2" ? "#1a1a1a" : "#ffffff",
+            backgroundColor: "var(--current-primary)",
+            color: "var(--text-invert)",
           }}
         >
           Open {project.title} →
@@ -142,9 +142,10 @@ export default function FreelanceShowcase() {
           <motion.p
             className="font-medium uppercase"
             style={{
+              fontFamily: "'Space Grotesk', var(--font-heading)",
               fontSize: "0.6875rem",
               letterSpacing: "0.1em",
-              color: "#f59e0b",
+              color: "var(--accent-freelance)",
               marginBottom: "var(--space-3)",
             }}
             initial={{ opacity: 0, y: 12 }}
@@ -157,8 +158,9 @@ export default function FreelanceShowcase() {
 
           <motion.h2
             id="freelance-title"
-            className="font-heading font-black tracking-tight"
+            className="font-black tracking-tight"
             style={{
+              fontFamily: "'Space Grotesk', var(--font-heading)",
               fontSize: "clamp(2rem, 8vw, var(--text-6xl))",
               lineHeight: "var(--leading-none)",
               color: "var(--current-text-bold)",
@@ -175,6 +177,7 @@ export default function FreelanceShowcase() {
           <motion.p
             className="max-w-2xl"
             style={{
+              fontFamily: "'Space Grotesk', var(--font-heading)",
               fontSize: "var(--text-base)",
               lineHeight: "var(--leading-relaxed)",
               color: "var(--current-text-light)",

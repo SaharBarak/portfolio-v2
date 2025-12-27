@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -10,7 +11,7 @@ interface TopicCardProps {
 }
 
 // Topic icons and colors mapping
-const TOPIC_CONFIG: Record<string, { icon: JSX.Element; gradient: string }> = {
+const TOPIC_CONFIG: Record<string, { icon: React.ReactNode; gradient: string }> = {
   engineering: {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

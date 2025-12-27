@@ -9,7 +9,7 @@ import { useBlogPosts } from "@/hooks/useContent";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CommandBar from "@/components/blog/CommandBar";
-import BlogThemeSwitcher from "@/components/blog/BlogThemeSwitcher";
+import BlogSkyToolbar from "@/components/blog/BlogSkyToolbar";
 import WelcomeSection from "@/components/blog/WelcomeSection";
 import QuickFilterTabs, { FilterTab } from "@/components/blog/QuickFilterTabs";
 import TopicCardsGrid from "@/components/blog/TopicCardsGrid";
@@ -264,7 +264,7 @@ export default function BlogPage() {
   return (
     <div className="blog-page-wrapper">
       <Header />
-      <BlogThemeSwitcher />
+      <BlogSkyToolbar />
       <main className="min-h-screen">
         {/* Compact container */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -419,7 +419,7 @@ export default function BlogPage() {
                 style={{
                   fontSize: "var(--text-2xl)",
                   lineHeight: "var(--leading-tight)",
-                  color: "white",
+                  color: "var(--current-text-bold)",
                   marginBottom: "var(--space-2)",
                 }}
               >

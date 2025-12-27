@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 
 export type FilterTab = "latest" | "popular" | "series";
@@ -9,7 +10,7 @@ interface QuickFilterTabsProps {
   onTabChange: (tab: FilterTab) => void;
 }
 
-const TABS: { id: FilterTab; label: string; icon: JSX.Element }[] = [
+const TABS: { id: FilterTab; label: string; icon: React.ReactNode }[] = [
   {
     id: "latest",
     label: "Latest",

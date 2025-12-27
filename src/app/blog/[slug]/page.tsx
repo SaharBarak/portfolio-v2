@@ -12,7 +12,7 @@ import CommentsSection from "@/components/blog/CommentsSection";
 import EngagementBar from "@/components/blog/EngagementBar";
 import ArticleNewsletter from "@/components/blog/ArticleNewsletter";
 import CodeBlock from "@/components/blog/CodeBlock";
-import BlogThemeSwitcher from "@/components/blog/BlogThemeSwitcher";
+import BlogSkyToolbar from "@/components/blog/BlogSkyToolbar";
 import ClapButton from "@/components/blog/ClapButton";
 import TextSelectionTooltip from "@/components/blog/TextSelectionTooltip";
 import BlogCover from "@/components/blog/BlogCover";
@@ -55,7 +55,7 @@ function ReadingProgressBar() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-white/5">
+    <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-[var(--card-border)]">
       <motion.div
         className="h-full bg-gradient-to-r from-purple-500 to-indigo-500"
         style={{ width: `${progress}%` }}
@@ -69,7 +69,7 @@ function TableOfContents({ items, activeId }: { items: TOCItem[]; activeId: stri
 
   return (
     <nav className="sticky top-28 hidden xl:block" style={{ maxHeight: "calc(100vh - 8rem)" }}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-4">
         On this page
       </p>
       <ul className="space-y-2 overflow-y-auto pr-4" style={{ maxHeight: "calc(100vh - 12rem)" }}>
@@ -77,11 +77,9 @@ function TableOfContents({ items, activeId }: { items: TOCItem[]; activeId: stri
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className="block text-sm transition-colors duration-200 hover:text-purple-400"
+              className={`block text-sm transition-colors duration-200 hover:text-[var(--accent)] ${activeId === item.id ? "text-[var(--accent)] font-medium" : "text-[var(--text-muted)]"}`}
               style={{
                 paddingLeft: `${(item.level - 1) * 12}px`,
-                color: activeId === item.id ? "#a78bfa" : "#71717a",
-                fontWeight: activeId === item.id ? 500 : 400,
               }}
             >
               {item.text}
@@ -179,7 +177,7 @@ function ShareButtons({ title, slug }: { title: string; slug: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-neutral-500 mr-2">Share</span>
+      <span className="text-sm font-medium text-[var(--text-muted)] mr-2">Share</span>
       {shareLinks.map((link) => (
         <a
           key={link.name}
@@ -351,12 +349,12 @@ function AuthorCard() {
   return (
     <div className="blog-author-card">
       <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl font-bold text-[var(--background)]">
           S
         </div>
         <div className="flex-1">
-          <h4 className="text-lg font-semibold text-white mb-1">Sahar Barak</h4>
-          <p className="text-sm text-neutral-400 mb-3">
+          <h4 className="text-lg font-semibold text-[var(--text-strong)] mb-1">Sahar Barak</h4>
+          <p className="text-sm text-[var(--text-muted)] mb-3">
             Engineer, researcher, and builder. Writing about AI, identity systems, clean energy, and the future of software.
           </p>
           <div className="flex gap-3">
@@ -364,7 +362,7 @@ function AuthorCard() {
               href="https://twitter.com/saharbarak"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-500 hover:text-purple-400 transition-colors"
+              className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -374,7 +372,7 @@ function AuthorCard() {
               href="https://github.com/SaharBarak"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-500 hover:text-purple-400 transition-colors"
+              className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -384,7 +382,7 @@ function AuthorCard() {
               href="https://linkedin.com/in/sahar-barak"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-500 hover:text-purple-400 transition-colors"
+              className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -411,14 +409,14 @@ function RelatedPosts({ currentSlug, currentTags }: { currentSlug: string; curre
   if (relatedPosts.length === 0) return null;
 
   return (
-    <section className="mt-16 pt-12 border-t border-white/5">
-      <h3 className="text-xl font-bold text-white mb-6">Related Articles</h3>
+    <section className="mt-16 pt-12 border-t border-[var(--card-border)]">
+      <h3 className="text-xl font-bold text-[var(--text-strong)] mb-6">Related Articles</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {relatedPosts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group block rounded-xl bg-white/[0.02] border border-white/5 hover:border-purple-500/30 transition-all overflow-hidden"
+            className="group block rounded-xl bg-[var(--card)] border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-all overflow-hidden"
           >
             <BlogCover
               coverImage={post.coverImage}
@@ -433,7 +431,7 @@ function RelatedPosts({ currentSlug, currentTags }: { currentSlug: string; curre
                   <span key={tag} className="blog-tag-sm">{tag}</span>
                 ))}
               </div>
-              <h4 className="font-semibold text-white group-hover:text-purple-400 transition-colors line-clamp-2">
+              <h4 className="font-semibold text-[var(--text-strong)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
                 {post.title}
               </h4>
             </div>
@@ -510,10 +508,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
         <main className="min-h-screen pt-24 pb-16">
           <div className="max-w-3xl mx-auto px-6">
             <div className="animate-pulse space-y-6">
-              <div className="h-4 bg-white/5 rounded w-20" />
-              <div className="h-12 bg-white/5 rounded w-3/4" />
-              <div className="h-4 bg-white/5 rounded w-1/4" />
-              <div className="h-64 bg-white/5 rounded mt-8" />
+              <div className="h-4 bg-[var(--card-border)] rounded w-20" />
+              <div className="h-12 bg-[var(--card-border)] rounded w-3/4" />
+              <div className="h-4 bg-[var(--card-border)] rounded w-1/4" />
+              <div className="h-64 bg-[var(--card-border)] rounded mt-8" />
             </div>
           </div>
         </main>
@@ -538,8 +536,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                   <line x1="15" y1="9" x2="15.01" y2="9" />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-white mb-4">Post Not Found</h1>
-              <p className="text-lg text-neutral-400 mb-8">The blog post you&apos;re looking for doesn&apos;t exist.</p>
+              <h1 className="text-3xl font-bold text-[var(--text-strong)] mb-4">Post Not Found</h1>
+              <p className="text-lg text-[var(--text-muted)] mb-8">The blog post you&apos;re looking for doesn&apos;t exist.</p>
               <Link href="/blog" className="blog-btn-primary inline-flex items-center gap-2">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M19 12H5" />
@@ -564,7 +562,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       <ReadingProgressBar />
       <Header />
       <BlogHeader title={post.title} />
-      <BlogThemeSwitcher />
+      <BlogSkyToolbar />
       <TextSelectionTooltip articleTitle={post.title} />
       <main className="min-h-screen pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-6">
@@ -573,7 +571,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             <article className="max-w-3xl">
               {/* Back link */}
               <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
-                <Link href="/blog" className="inline-flex items-center gap-2 mb-8 text-sm font-medium text-neutral-500 hover:text-purple-400 transition-colors group">
+                <Link href="/blog" className="inline-flex items-center gap-2 mb-8 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors group">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
                     <path d="M19 12H5" />
                     <path d="m12 19-7-7 7-7" />
@@ -596,7 +594,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
                 <div className="flex flex-wrap items-center gap-4 mb-6">
                   {formattedDate && (
-                    <span className="flex items-center gap-2 text-sm text-neutral-500">
+                    <span className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -606,14 +604,14 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                       {formattedDate}
                     </span>
                   )}
-                  <span className="flex items-center gap-2 text-sm text-neutral-500">
+                  <span className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
                     {readingTime} min read
                   </span>
-                  <span className="flex items-center gap-2 text-sm text-neutral-500">
+                  <span className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                       <circle cx="12" cy="12" r="3" />
@@ -645,11 +643,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
               {/* Content */}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-                {post.content ? <MarkdownRenderer content={post.content} /> : <p className="text-center py-12 text-neutral-500">Content coming soon...</p>}
+                {post.content ? <MarkdownRenderer content={post.content} /> : <p className="text-center py-12 text-[var(--text-muted)]">Content coming soon...</p>}
               </motion.div>
 
               {/* Clap Button - Medium-style appreciation */}
-              <div className="border-t border-b border-white/10 py-6 my-8">
+              <div className="border-t border-b border-[var(--card-border)] py-6 my-8">
                 <ClapButton slug={slug} />
               </div>
 

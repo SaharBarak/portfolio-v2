@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 
 interface BlogHeaderProps {
@@ -13,14 +13,16 @@ export default function BlogHeader({ title, showTitle = true }: BlogHeaderProps)
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
-  const scrollY = useMotionValue(0);
 
   // Smooth spring animation for transform
   const springConfig = { stiffness: 400, damping: 30 };
-  const translateY = useSpring(
-    useTransform(scrollY, () => (isVisible ? 0 : -100)),
-    springConfig
-  );
+  const yValue = useMotionValue(isVisible ? 0 : -100);
+  const translateY = useSpring(yValue, springConfig);
+
+  // Update yValue when visibility changes
+  useEffect(() => {
+    yValue.set(isVisible ? 0 : -100);
+  }, [isVisible, yValue]);
 
   useEffect(() => {
     let ticking = false;
@@ -48,7 +50,6 @@ export default function BlogHeader({ title, showTitle = true }: BlogHeaderProps)
             lastScrollY.current = currentScrollY;
           }
 
-          scrollY.set(currentScrollY);
           ticking = false;
         });
       }
@@ -56,7 +57,7 @@ export default function BlogHeader({ title, showTitle = true }: BlogHeaderProps)
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrollY]);
+  }, []);
 
   return (
     <motion.header

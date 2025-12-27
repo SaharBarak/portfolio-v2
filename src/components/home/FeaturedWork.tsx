@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useProjects } from "@/hooks/useContent";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface Project {
   title: string;
@@ -12,6 +13,12 @@ interface Project {
   link: string;
   logo: string;
   brandColors: {
+    bg: string;
+    accent: string;
+    text: string;
+    textMuted: string;
+  };
+  lightModeColors?: {
     bg: string;
     accent: string;
     text: string;
@@ -30,8 +37,14 @@ const fallbackProjects: Project[] = [
     brandColors: {
       bg: "#00141E",
       accent: "#22E974",
-      text: "#ffffff",
+      text: "#f5f5f7",
       textMuted: "rgba(255,255,255,0.5)",
+    },
+    lightModeColors: {
+      bg: "#f0fdf4",
+      accent: "#16a34a",
+      text: "#1c1c1e",
+      textMuted: "rgba(28,28,30,0.6)",
     },
   },
   {
@@ -43,8 +56,14 @@ const fallbackProjects: Project[] = [
     brandColors: {
       bg: "#0C0A09",
       accent: "#CE5D17",
-      text: "#ffffff",
+      text: "#f5f5f7",
       textMuted: "rgba(255,255,255,0.5)",
+    },
+    lightModeColors: {
+      bg: "#fff7ed",
+      accent: "#c2410c",
+      text: "#1c1c1e",
+      textMuted: "rgba(28,28,30,0.6)",
     },
   },
   {
@@ -56,8 +75,14 @@ const fallbackProjects: Project[] = [
     brandColors: {
       bg: "#0a0a0a",
       accent: "#FFE262",
-      text: "#ffffff",
+      text: "#f5f5f7",
       textMuted: "rgba(255,255,255,0.5)",
+    },
+    lightModeColors: {
+      bg: "#fefce8",
+      accent: "#ca8a04",
+      text: "#1c1c1e",
+      textMuted: "rgba(28,28,30,0.6)",
     },
   },
   {
@@ -69,8 +94,14 @@ const fallbackProjects: Project[] = [
     brandColors: {
       bg: "#FAF7F2",
       accent: "#FF6B35",
-      text: "#1a1a1a",
-      textMuted: "rgba(26,26,26,0.5)",
+      text: "#1c1c1e",
+      textMuted: "rgba(28,28,30,0.5)",
+    },
+    lightModeColors: {
+      bg: "#fff1f2",
+      accent: "#dc2626",
+      text: "#1c1c1e",
+      textMuted: "rgba(28,28,30,0.6)",
     },
   },
 ];
@@ -78,14 +109,18 @@ const fallbackProjects: Project[] = [
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [isActive, setIsActive] = useState(false);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const { isDarkMode } = useTheme();
+
+  // Use theme-appropriate brand colors for each project
+  const colors = isDarkMode ? project.brandColors : project.lightModeColors;
 
   return (
     <motion.div
-      className="group relative flex-shrink-0 overflow-hidden"
+      className="group relative flex-shrink-0 overflow-hidden featured-work-card"
       style={{
         width: '390px',
         height: '312px',
-        backgroundColor: project.brandColors.bg,
+        backgroundColor: colors?.bg || 'var(--card)',
         borderRadius: '16px',
       }}
       initial={{ opacity: 0, x: 30 }}
@@ -129,7 +164,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             style={{
               fontSize: '0.625rem',
               letterSpacing: '0.1em',
-              color: project.brandColors.accent,
+              color: colors?.accent || 'var(--current-primary)',
               marginBottom: '8px',
             }}
           >
@@ -142,7 +177,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             style={{
               fontSize: '1.375rem',
               lineHeight: 1.2,
-              color: project.brandColors.text,
+              color: colors?.text || 'var(--current-text-bold)',
               marginBottom: '12px',
             }}
           >
@@ -155,7 +190,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             style={{
               fontSize: '0.9375rem',
               lineHeight: 1.55,
-              color: project.brandColors.textMuted,
+              color: colors?.textMuted || 'var(--current-text-light)',
             }}
           >
             {project.description}
@@ -165,7 +200,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <div
             className="flex items-center gap-2 mt-4"
             style={{
-              color: project.brandColors.accent,
+              color: colors?.accent || 'var(--current-primary)',
               fontSize: '0.8125rem',
               fontWeight: 500,
             }}
@@ -191,13 +226,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {!iframeLoaded && (
               <div
                 className="absolute inset-0 flex items-center justify-center"
-                style={{ backgroundColor: project.brandColors.bg }}
+                style={{ backgroundColor: colors?.bg || 'var(--card)' }}
               >
                 <div
                   className="w-6 h-6 border-2 rounded-full animate-spin"
                   style={{
-                    borderColor: `${project.brandColors.accent}40`,
-                    borderTopColor: project.brandColors.accent,
+                    borderColor: 'var(--border-subtle)',
+                    borderTopColor: colors?.accent || 'var(--current-primary)',
                   }}
                 />
               </div>
@@ -223,18 +258,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-4 pointer-events-none"
               style={{
                 height: '80px',
-                background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)',
+                background: 'linear-gradient(to top, var(--surface-active) 0%, transparent 100%)',
               }}
             >
               <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full text-white font-medium pointer-events-auto"
+                className="px-4 py-2 rounded-full font-medium pointer-events-auto"
                 style={{
                   fontSize: '0.8125rem',
-                  backgroundColor: project.brandColors.accent,
-                  color: project.brandColors.bg === '#FAF7F2' ? '#1a1a1a' : '#ffffff',
+                  backgroundColor: colors?.accent || 'var(--current-primary)',
+                  color: 'var(--text-invert)',
                 }}
               >
                 Open {project.title} →
@@ -282,7 +317,7 @@ export default function FeaturedWork() {
             style={{
               fontSize: '0.6875rem',
               letterSpacing: '0.1em',
-              color: '#8B5CF6',
+              color: 'var(--accent-featured)',
               marginBottom: 'var(--space-3)',
             }}
             initial={{ opacity: 0, y: 12 }}
@@ -329,7 +364,7 @@ export default function FeaturedWork() {
         </div>
       </header>
 
-      {/* Horizontal Scrollable Container - starts more to the left */}
+      {/* Horizontal Scrollable Container */}
       <div
         className="overflow-x-auto scrollbar-hide"
         style={{
